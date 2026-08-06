@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>读书笔记：《终身成长》</title>
+<style>
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: "PingFang SC", "Noto Serif SC", "Source Han Serif SC", "STSong", "Songti SC", Georgia, "Times New Roman", serif;
+    background-color: #f5f0e8;
+    color: #3d3226;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    position: relative;
+    width: 100%;
+    min-height: 75vh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, rgba(30,20,10,0.35) 0%, rgba(30,20,10,0.55) 30%, rgba(30,20,10,0.92) 100%),
+      linear-gradient(0deg, rgba(80,60,30,0.3) 0%, transparent 50%),
+      url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1920&q=80&fit=crop') center 35% / cover no-repeat;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 80%, rgba(180,150,100,0.25) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 6rem 2rem 5rem;
+    max-width: 800px;
+  }
+  .hero-label {
+    display: inline-block;
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #d4c5a9;
+    border: 1px solid rgba(212,197,169,0.4);
+    border-radius: 2px;
+    padding: 0.4em 1.4em;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(2px);
+  }
+  .hero h1 {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", "Songti SC", Georgia, serif;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 700;
+    color: #faf6ed;
+    letter-spacing: 0.06em;
+    line-height: 1.3;
+    margin-bottom: 1.2rem;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  }
+  .hero .subtitle {
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: clamp(1rem, 2.2vw, 1.25rem);
+    color: #c4b393;
+    letter-spacing: 0.15em;
+    font-weight: 400;
+  }
+  .hero .author {
+    margin-top: 2.5rem;
+    font-size: 0.95rem;
+    color: #b8a888;
+    letter-spacing: 0.08em;
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+  }
+  .hero .author span { color: #d4c098; }
+
+  /* ===== Ribbon ===== */
+  .ribbon-wrap {
+    position: relative;
+    z-index: 10;
+    margin-top: -1px;
+    background: #f5f0e8;
+    display: flex;
+    justify-content: center;
+  }
+  .ribbon {
+    position: relative;
+    top: -2.2rem;
+    background: #b5343a;
+    color: #fdf5e6;
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    padding: 0.65rem 2.8rem;
+    border-radius: 2px;
+    box-shadow: 0 4px 20px rgba(140,40,45,0.35);
+    text-align: center;
+  }
+  .ribbon::before,
+  .ribbon::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+  .ribbon::before {
+    left: 0;
+    border-width: 0 0 12px 10px;
+    border-color: transparent transparent transparent #7a2024;
+  }
+  .ribbon::after {
+    right: 0;
+    border-width: 0 10px 12px 0;
+    border-color: transparent #7a2024 transparent transparent;
+  }
+
+  /* ===== Container ===== */
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+  }
+
+  /* ===== Section Titles ===== */
+  .section-title {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", "Songti SC", Georgia, serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #4a3525;
+    margin: 3.5rem 0 1.5rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid #b5343a;
+    display: inline-block;
+    letter-spacing: 0.04em;
+  }
+
+  /* ===== Book Info Card ===== */
+  .book-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-top: 2rem;
+    background: linear-gradient(135deg, #fdfaf4 0%, #f7f1e5 100%);
+    border: 1px solid #e0d5c0;
+    border-radius: 6px;
+    padding: 2rem;
+    box-shadow: 0 2px 16px rgba(100,70,30,0.06);
+  }
+  .book-info .info-item {
+    display: flex;
+    flex-direction: column;
+  }
+  .book-info .info-label {
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    color: #9b8b77;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+  .book-info .info-value {
+    font-size: 0.95rem;
+    color: #3d3226;
+    font-weight: 500;
+  }
+  .book-info .info-value.em {
+    color: #b5343a;
+    font-weight: 600;
+  }
+
+  /* ===== Overview ===== */
+  .overview-block {
+    background: linear-gradient(135deg, #faf6ed, #f3ebd8);
+    border-left: 4px solid #b5343a;
+    padding: 1.8rem 2rem;
+    margin: 2rem 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 1.1rem;
+    color: #4a3525;
+    line-height: 2;
+    letter-spacing: 0.03em;
+  }
+  .overview-block .marker {
+    display: inline-block;
+    background: rgba(181,52,58,0.1);
+    padding: 0.1em 0.5em;
+    border-radius: 2px;
+    font-weight: 600;
+    color: #b5343a;
+  }
+
+  /* ===== Comparison Framework ===== */
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .comparison .col {
+    padding: 2rem;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .comparison .col.fixed {
+    background: linear-gradient(160deg, #f5efe5 0%, #ede3d2 100%);
+    border: 1px solid #d4c5a9;
+  }
+  .comparison .col.growth {
+    background: linear-gradient(160deg, #faf5eb 0%, #f2e8d5 100%);
+    border: 1px solid #b5343a;
+  }
+  .comparison .col-badge {
+    display: inline-block;
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    padding: 0.3em 1em;
+    border-radius: 3px;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  .fixed .col-badge { background: #4a3525; color: #e8ddc8; }
+  .growth .col-badge { background: #b5343a; color: #fdf5e6; }
+  .comparison h4 {
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+    color: #3d3226;
+    letter-spacing: 0.04em;
+  }
+  .comparison ul {
+    list-style: none;
+    padding: 0;
+  }
+  .comparison ul li {
+    position: relative;
+    padding: 0.45rem 0 0.45rem 1.6rem;
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: #5a4a38;
+  }
+  .comparison ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.85rem;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+  .fixed ul li::before { background: #9b8b77; }
+  .growth ul li::before { background: #b5343a; }
+
+  /* ===== Concept Cards ===== */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.2rem;
+    margin: 1.5rem 0;
+  }
+  .concept-card {
+    background: #fdfaf4;
+    border: 1px solid #e0d5c0;
+    border-radius: 6px;
+    padding: 1.5rem;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .concept-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(100,70,30,0.1);
+  }
+  .concept-card .card-num {
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: #b5343a;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .concept-card h5 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #3d3226;
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.03em;
+  }
+  .concept-card p {
+    font-size: 0.85rem;
+    color: #6b5d4a;
+    line-height: 1.75;
+  }
+
+  /* ===== Chapter Map ===== */
+  .chapter-map {
+    margin: 1.5rem 0;
+  }
+  .chapter-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    padding: 1.2rem 0;
+    border-bottom: 1px dashed #d4c5a9;
+  }
+  .chapter-item:last-child { border-bottom: none; }
+  .chapter-num {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #b5343a, #8a282d);
+    color: #fdf5e6;
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(140,40,45,0.2);
+  }
+  .chapter-info h5 {
+    font-size: 1rem;
+    color: #3d3226;
+    margin-bottom: 0.25rem;
+  }
+  .chapter-info p {
+    font-size: 0.85rem;
+    color: #7b6d58;
+    line-height: 1.7;
+  }
+
+  /* ===== Quotes ===== */
+  .quote-block {
+    background: linear-gradient(135deg, #fdfaf4, #f7efe0);
+    border: 1px solid #e0d5c0;
+    border-radius: 6px;
+    padding: 2rem;
+    margin: 1.2rem 0;
+    position: relative;
+  }
+  .quote-block::before {
+    content: '\201C';
+    position: absolute;
+    top: 0.5rem;
+    left: 1.2rem;
+    font-size: 4rem;
+    color: #b5343a;
+    opacity: 0.2;
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+  .quote-block .quote-text {
+    font-size: 1.05rem;
+    line-height: 2;
+    color: #3d3226;
+    font-style: italic;
+    padding-left: 0.5rem;
+    letter-spacing: 0.03em;
+  }
+  .quote-block .quote-context {
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.8rem;
+    color: #9b8b77;
+    margin-top: 0.8rem;
+    padding-left: 0.5rem;
+  }
+
+  /* ===== Action Insights ===== */
+  .insights-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+  }
+  .insights-list li {
+    position: relative;
+    padding: 1rem 0 1rem 2.2rem;
+    border-bottom: 1px solid #e8ddc8;
+  }
+  .insights-list li:last-child { border-bottom: none; }
+  .insights-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1.35rem;
+    width: 10px;
+    height: 10px;
+    background: #b5343a;
+    border-radius: 2px;
+    transform: rotate(45deg);
+  }
+  .insights-list li strong {
+    display: block;
+    font-size: 0.95rem;
+    color: #3d3226;
+    margin-bottom: 0.3rem;
+  }
+  .insights-list li span {
+    font-size: 0.85rem;
+    color: #6b5d4a;
+    line-height: 1.7;
+  }
+
+  /* ===== Footer ===== */
+  .who-read {
+    background: linear-gradient(135deg, #4a3525, #3d2a1c);
+    color: #d4c5a9;
+    border-radius: 8px;
+    padding: 2.2rem;
+    margin: 2rem 0;
+  }
+  .who-read h3 {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", "Songti SC", Georgia, serif;
+    color: #faf6ed;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.04em;
+  }
+  .who-read .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .who-read .tag {
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 0.4em 1em;
+    border-radius: 50px;
+    letter-spacing: 0.06em;
+    color: #d4c5a9;
+  }
+
+  .colophon {
+    text-align: center;
+    padding: 3rem 0;
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.8rem;
+    color: #b8a888;
+    letter-spacing: 0.08em;
+    border-top: 1px solid #e0d5c0;
+    margin-top: 2rem;
+  }
+
+  .colophon a { color: #8a5a3a; text-decoration: none; }
+
+  /* ===== Scroll Top ===== */
+  .scroll-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(181,52,58,0.85);
+    color: #fdf5e6;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(140,40,45,0.3);
+  }
+  .scroll-top.visible { opacity: 1; pointer-events: auto; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 640px) {
+    .hero { min-height: 55vh; }
+    .hero-content { padding: 4rem 1.2rem 3rem; }
+    .hero h1 { font-size: 2rem; }
+    .hero .subtitle { font-size: 0.9rem; }
+    .book-info { grid-template-columns: 1fr; gap: 0.8rem; padding: 1.5rem; }
+    .comparison { grid-template-columns: 1fr; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .container { padding: 0 1rem 3rem; }
+    .section-title { font-size: 1.3rem; margin-top: 2.5rem; }
+    .overview-block { padding: 1.2rem 1.2rem; font-size: 1rem; }
+    .chapter-item { gap: 0.8rem; }
+    .chapter-num { width: 36px; height: 36px; font-size: 0.75rem; }
+    .scroll-top { bottom: 1.2rem; right: 1.2rem; width: 36px; height: 36px; }
+  }
+
+  /* ===== Back to Shelf ===== */
+  .back-to-shelf {
+    position: fixed;
+    top: 1.2rem;
+    left: 1.2rem;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 0.45rem 1rem;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.15);
+    letter-spacing: 0.04em;
+    transition: background 0.2s, color 0.2s;
+  }
+  .back-to-shelf:hover {
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+  }
+  .back-arrow {
+    font-size: 1rem;
+    line-height: 1;
+  }
+  @media (max-width: 480px) {
+    .back-to-shelf {
+      top: 0.8rem;
+      left: 0.8rem;
+      font-size: 0.72rem;
+      padding: 0.35rem 0.8rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<a href="../../" class="back-to-shelf"><span class="back-arrow">←</span> 返回书架</a>
+
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <div class="hero-content">
+    <div class="hero-label">读 书 笔 记</div>
+    <h1>终身成长</h1>
+    <p class="subtitle">重新定义成功的思维模式</p>
+    <p class="author">[美] 卡罗尔·德韦克 <span>Mindset: The New Psychology of Success</span></p>
+  </div>
+</header>
+
+<div class="ribbon-wrap">
+  <div class="ribbon">核 心 命 题 ： 你 的 思 维 模 式 决 定 你 能 走 多 远</div>
+</div>
+
+<!-- ===== Main Content ===== -->
+<main class="container">
+
+  <!-- 书籍信息 -->
+  <h2 class="section-title">书籍信息</h2>
+  <div class="book-info">
+    <div class="info-item">
+      <span class="info-label">作者</span>
+      <span class="info-value">卡罗尔·德韦克 (Carol S. Dweck)</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">领域</span>
+      <span class="info-value em">心理学 / 发展心理学 / 认知科学</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">作者背景</span>
+      <span class="info-value">斯坦福大学心理学教授，美国艺术与科学院院士，动机与人格发展领域权威</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">核心命题</span>
+      <span class="info-value em">成长型思维 (Growth Mindset) vs 固定型思维 (Fixed Mindset)</span>
+    </div>
+  </div>
+
+  <!-- 一句话总览 -->
+  <h2 class="section-title">一句话总览</h2>
+  <div class="overview-block">
+    一个人对自身能力是否<span class="marker">可改变</span>的根本信念，比天赋本身更能预测他在学业、事业、运动、人际关系中的长期成就——这就是<span class="marker">思维模式</span>的力量。
+  </div>
+
+  <!-- 核心框架对比 -->
+  <h2 class="section-title">核心框架：两种思维模式</h2>
+  <div class="comparison">
+    <div class="col fixed">
+      <span class="col-badge">固定型思维 FIXED MINDSET</span>
+      <h4>相信能力是固定不变的</h4>
+      <ul>
+        <li>急于一遍遍证明自己的聪明</li>
+        <li>失败 = 我不够聪明，是永久标签</li>
+        <li>努力说明能力不足，掩盖不足比改进重要</li>
+        <li>回避挑战，选择安全区以维持"聪明"形象</li>
+        <li>对批评防御性强，视反馈为对人身的否定</li>
+        <li>他人成功 = 自己的威胁</li>
+        <li>典型句式：「我天生不擅长这个」</li>
+      </ul>
+    </div>
+    <div class="col growth">
+      <span class="col-badge">成长型思维 GROWTH MINDSET</span>
+      <h4>相信能力可以通过努力培养</h4>
+      <ul>
+        <li>关注学习本身而非证明自己</li>
+        <li>失败 = 学习机会，是成长过程中的反馈</li>
+        <li>努力是通往精通的必经之路</li>
+        <li>主动迎接挑战，视困难为成长的起点</li>
+        <li>对批评开放，视反馈为改进的指南针</li>
+        <li>他人成功 = 灵感与学习来源</li>
+        <li>典型句式：「我还没有掌握，但可以学会」</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 关键概念卡片 -->
+  <h2 class="section-title">关键概念</h2>
+  <div class="cards-grid">
+
+    <div class="concept-card">
+      <div class="card-num">01 概念</div>
+      <h5>能力的可塑性</h5>
+      <p>智力商数并非固定值。比奈设计IQ测验的初衷恰恰是识别需要帮助的学生，而非给人贴永久标签。大脑像肌肉，越用越强。</p>
+    </div>
+
+    <div class="concept-card">
+      <div class="card-num">02 概念</div>
+      <h5>努力的意义重构</h5>
+      <p>在固定型思维中努力等于承认无能；在成长型思维中，努力本身就是能力的体现。顶级运动员和艺术家无一例外将努力置于天赋之上。</p>
+    </div>
+
+    <div class="concept-card">
+      <div class="card-num">03 概念</div>
+      <h5>失败的重新定义</h5>
+      <p>固定型思维者将失败等同于身份标签（"我是个失败者"）；成长型思维者将失败视为事件（"这次没做好"），从中学到东西后继续前进。</p>
+    </div>
+
+    <div class="concept-card">
+      <div class="card-num">04 概念</div>
+      <h5>标签的危险</h5>
+      <p>夸孩子"你真聪明"会植入固定型思维——他们开始回避困难任务以维持聪明标签。夸"你很努力"则培养成长型思维，鼓励迎接挑战。</p>
+    </div>
+
+    <div class="concept-card">
+      <div class="card-num">05 概念</div>
+      <h5>CEO 综合征</h5>
+      <p>固定型思维的领导者沉迷于证明自己的天才，压制异见、拒绝反馈，最终导致组织僵化。成长型思维的领导者则倾听、信任、培养人。</p>
+    </div>
+
+    <div class="concept-card">
+      <div class="card-num">06 概念</div>
+      <h5>冠军思维</h5>
+      <p>迈克尔·乔丹曾被校队淘汰，但他将其视为需要更努力的信号。真正的冠军关注的不是"我是否天生伟大"，而是"我今天比昨天进步了多少"。</p>
+    </div>
+
+    <div class="concept-card">
+      <div class="card-num">07 概念</div>
+      <h5>虚假的成长型思维</h5>
+      <p>很多人自称拥有成长型思维，但行为上仍回避挑战、害怕失败。真正的成长型思维需要诚实面对自己的固定型思维部分，并持续练习转变。</p>
+    </div>
+
+    <div class="concept-card">
+      <div class="card-num">08 概念</div>
+      <h5>改变的四步路径</h5>
+      <p>接受（承认自己有一部分固定型思维）→ 观察（识别触发它的场景）→ 命名（给它起个名字，人格化）→ 教育（用成长型思维与之对话、引导它）。</p>
+    </div>
+
+  </div>
+
+  <!-- 全书章节脉络 -->
+  <h2 class="section-title">全书章节脉络</h2>
+  <div class="chapter-map">
+
+    <div class="chapter-item">
+      <div class="chapter-num">1</div>
+      <div class="chapter-info">
+        <h5>思维模式</h5>
+        <p>引入固定型思维与成长型思维的定义。通过对比实验说明两种思维模式如何影响人们对挑战和失败的反应，奠定全书理论框架。</p>
+      </div>
+    </div>
+
+    <div class="chapter-item">
+      <div class="chapter-num">2</div>
+      <div class="chapter-info">
+        <h5>思维模式解析</h5>
+        <p>深入剖析两种思维模式对成功、失败、努力的不同解读。探讨"CEO综合征"、能力拓展与自我设限、以及思维模式如何改变失败的意义。</p>
+      </div>
+    </div>
+
+    <div class="chapter-item">
+      <div class="chapter-num">3</div>
+      <div class="chapter-info">
+        <h5>关于能力和成就的真相</h5>
+        <p>思维模式如何影响学业成绩？讨论"不愿努力"综合征、天赋标签的陷阱、夸赞与否定标签的危险性，以及归属感对学习的影响。</p>
+      </div>
+    </div>
+
+    <div class="chapter-item">
+      <div class="chapter-num">4</div>
+      <div class="chapter-info">
+        <h5>体育：冠军的思维模式</h5>
+        <p>以迈克尔·乔丹等运动员为例，论证顶级成就并非天生才能的产物，而是成长型思维的体现。讨论品格、决心、意志与冠军思维的养成。</p>
+      </div>
+    </div>
+
+    <div class="chapter-item">
+      <div class="chapter-num">5</div>
+      <div class="chapter-info">
+        <h5>商业：思维模式和领导力</h5>
+        <p>对比固定型思维CEO（艾柯卡、邓拉普）与成长型思维CEO（韦尔奇、郭士纳、穆尔卡希）的领导风格差异。论证组织文化同样存在思维模式。</p>
+      </div>
+    </div>
+
+    <div class="chapter-item">
+      <div class="chapter-num">6</div>
+      <div class="chapter-info">
+        <h5>人际关系：关于相处的思维模式</h5>
+        <p>两种思维模式如何影响恋爱关系和友谊？固定型思维者认为"需要努力的关系注定不属于我"，成长型思维者则理解所有关系都需要经营和成长。</p>
+      </div>
+    </div>
+
+    <div class="chapter-item">
+      <div class="chapter-num">7</div>
+      <div class="chapter-info">
+        <h5>父母、老师与教练：思维模式的传播</h5>
+        <p>教育者的语言如何塑造孩子的思维模式？提出高标准与培育环境的结合，批评"虚假的成长型思维"，给出培养真正成长型思维的具体方法。</p>
+      </div>
+    </div>
+
+    <div class="chapter-item">
+      <div class="chapter-num">8</div>
+      <div class="chapter-info">
+        <h5>改变思维模式</h5>
+        <p>提供可操作的改变路径：接受→观察→命名→教育。讨论思维模式与意志力的关系，以及如何让改变持续而非昙花一现。以神经科学项目收尾。</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 金句 -->
+  <h2 class="section-title">金句摘录</h2>
+
+  <div class="quote-block">
+    <p class="quote-text">你不需要觉得自己对某件事很在行才愿意去做这件事，并享受做这件事的乐趣。</p>
+    <p class="quote-context">—— 第1章：当作者观察到热爱挑战的孩子们后的感悟</p>
+  </div>
+
+  <div class="quote-block">
+    <p class="quote-text">人类在终身学习和大脑发展这一方面比我们自己想象中更有潜力。每个人都有自己独一无二的、先天遗传的才能。可能在最开始的时候，人类会展现出不一样的气质和才能，但很清楚的是，个人经历、能力培训以及个人努力会对之后的人生产生影响。</p>
+    <p class="quote-context">—— 第1章：关于能力可塑性的论述</p>
+  </div>
+
+  <div class="quote-block">
+    <p class="quote-text">即使事情发展不顺利时也能拥有这种想要提升自己并坚持不懈的激情，这就是拥有成长型思维模式的人身上的标志。这种思维模式，让人们在人生遭遇重大挑战的时刻，依然可以茁壮成长。</p>
+    <p class="quote-context">—— 第1章：成长型思维的定义性描述</p>
+  </div>
+
+  <div class="quote-block">
+    <p class="quote-text">思维模式的转变不是采取一点建议就能完成的，而是意味着用全新的方式看待问题。无论是丈夫与妻子、教练与运动员、经理与员工、父母与子女还是老师与学生，一旦开始用成长型思维模式看待问题，就从评判与被评判的关系转变成了学习与帮助学习的关系。</p>
+    <p class="quote-context">—— 第8章：关于思维模式转变的本质</p>
+  </div>
+
+  <div class="quote-block">
+    <p class="quote-text">人们放弃非好即坏、非强即弱这种从固定型思维模式中产生的想法时，就能更好地学习有效的策略，帮助自己控制自己了。每一个小错误都不会导致世界末日，这些错误和成长型思维模式中的其他方面一样，都在提醒你，你不是一个十全十美的人，告诉你下次该怎样才能做得更好。</p>
+    <p class="quote-context">—— 第8章：改变与自我控制的关系</p>
+  </div>
+
+  <!-- 行动启发 -->
+  <h2 class="section-title">对工作与决策的行动启发</h2>
+  <ul class="insights-list">
+    <li>
+      <strong>将「失败」重命名为「数据」</strong>
+      <span>每次产品失误、客户流失、项目延期都不是对你能力的审判，而是可分析的数据点。问自己：「我从这件事中学到了什么？下次会怎么调整？」</span>
+    </li>
+    <li>
+      <strong>审视你对团队的夸奖方式</strong>
+      <span>夸「你真有天赋」会在下属脑中种下固定型思维，使其回避困难任务以维持形象。改为夸具体行为：「你在那个方案上花了很多心思研究竞品，这个角度很有价值。」</span>
+    </li>
+    <li>
+      <strong>建立「还没有」(Not Yet) 文化</strong>
+      <span>当有人说「我不懂这个」，纠正为「你还没有懂」。这个简单的语义转换将一次性的能力判断变成了过程性描述，打开了成长的空间。</span>
+    </li>
+    <li>
+      <strong>警惕「天才CEO」陷阱</strong>
+      <span>固定型思维领导者沉迷于证明自己是房间里最聪明的人，导致团队不敢提反对意见。成长型思维的管理者把精力放在培养人、倾听反馈和持续学习上。</span>
+    </li>
+    <li>
+      <strong>在绩效评估中区分「评价」与「发展」</strong>
+      <span>纯粹的排名和标签使人防御；加入「你下一步可以在哪个方向上成长」的讨论，让评估不再是终点，而是下一个阶段的起点。</span>
+    </li>
+    <li>
+      <strong>识别并命名你的固定型思维人格</strong>
+      <span>当面对重大挑战感到焦虑时，意识到那是你的固定型思维在说话。给它取个名字，与之对话：「谢谢你的提醒，但我选择试试看。」</span>
+    </li>
+  </ul>
+
+  <!-- 适合谁读 -->
+  <h2 class="section-title">适合谁读</h2>
+  <div class="who-read">
+    <h3>这本书特别适合——</h3>
+    <div class="tag-list">
+      <span class="tag">产品经理与决策者</span>
+      <span class="tag">团队管理者</span>
+      <span class="tag">创业者</span>
+      <span class="tag">教育工作者</span>
+      <span class="tag">家长</span>
+      <span class="tag">教练与导师</span>
+      <span class="tag">正在经历挫折的人</span>
+      <span class="tag">想要突破瓶颈的人</span>
+      <span class="tag">对自我认知感兴趣的人</span>
+    </div>
+  </div>
+
+  <!-- Colophon -->
+  <div class="colophon">
+    <p>读书笔记 · 《终身成长》卡罗尔·德韦克</p>
+    <p>整理于 2026 年 8 月 · 仅供个人学习参考</p>
+  </div>
+
+</main>
+
+<!-- Scroll-to-top -->
+<button class="scroll-top" id="scrollTop" aria-label="回到顶部">&uarr;</button>
+
+<script>
+  const btn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 500);
+  });
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+
+</body>
+</html>
