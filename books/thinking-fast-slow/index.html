@@ -144,6 +144,31 @@
     padding: 1rem 2rem 4rem;
   }
 
+  /* ===== Scroll-triggered animations ===== */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .animate-on-scroll.card-stagger { transition-delay: calc(var(--i, 0) * 0.06s); }
+  .animate-on-scroll.card-stagger.visible { transition-delay: calc(var(--i, 0) * 0.06s); }
+
+  /* Quote-block left border slide */
+  .quote-block.animate-on-scroll {
+    border-left: 4px solid transparent;
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                border-left-color 0.6s 0.2s ease;
+  }
+  .quote-block.animate-on-scroll.visible {
+    border-left-color: #2e86c1;
+  }
+
   /* ===== Section Title ===== */
   .section-title {
     font-size: 1.4rem;
@@ -506,7 +531,7 @@
 <main class="container">
 
   <!-- 书籍信息 -->
-  <h2 class="section-title">书籍信息</h2>
+  <h2 class="section-title animate-on-scroll">书籍信息</h2>
   <div class="book-info">
     <div class="info-item">
       <span class="info-label">作者</span>
@@ -527,13 +552,13 @@
   </div>
 
   <!-- 一句话总览 -->
-  <h2 class="section-title">一句话总览</h2>
+  <h2 class="section-title animate-on-scroll">一句话总览</h2>
   <div class="overview">
     <p>人类的大脑有两套认知系统：快速、直觉、自动的系统1，和缓慢、理性、需投入努力的系统2。我们以为自己在用理性做决策，实际上大多数时候是系统1在自动运行&mdash;&mdash;而它充满了可预测的偏误。</p>
   </div>
 
   <!-- 核心框架：双系统 -->
-  <h2 class="section-title">核心框架：两个系统</h2>
+  <h2 class="section-title animate-on-scroll">核心框架：两个系统</h2>
   <div class="systems-grid">
     <div class="system-card system-1">
       <div class="system-tag">SYSTEM 1 &mdash; 快思考</div>
@@ -568,73 +593,73 @@
   </div>
 
   <!-- 关键认知偏误 -->
-  <h2 class="section-title">关键认知偏误</h2>
+  <h2 class="section-title animate-on-scroll">关键认知偏误</h2>
   <div class="bias-grid">
 
-    <div class="bias-card">
+    <div class="bias-card animate-on-scroll card-stagger" style="--i: 0">
       <div class="bias-num">01 &mdash; ANCHORING</div>
       <h4>锚定效应</h4>
       <p>系统1会抓住最先出现的信息（"锚"）不放，后续判断都围绕这个锚做调整&mdash;&mdash;但调整往往远远不够。</p>
       <div class="bias-example">实验：先看身份证号再估 Gandhi 的寿命，编号越大，估计的年龄越高。</div>
     </div>
 
-    <div class="bias-card">
+    <div class="bias-card animate-on-scroll card-stagger" style="--i: 1">
       <div class="bias-num">02 &mdash; AVAILABILITY</div>
       <h4>可得性启发</h4>
       <p>越容易回想起的事件，我们越觉得它常发生。系统1用"想起来的容易程度"替代了"实际概率"的判断。</p>
       <div class="bias-example">飞机失事新闻密集播出后，人们高估空难概率，低估车祸概率&mdash;&mdash;虽然车祸致死率远高于空难。</div>
     </div>
 
-    <div class="bias-card">
+    <div class="bias-card animate-on-scroll card-stagger" style="--i: 2">
       <div class="bias-num">03 &mdash; LOSS AVERSION</div>
       <h4>损失厌恶</h4>
       <p>失去100元带来的痛苦，大约是获得100元带来快乐的两倍。人对损失的敏感度远超对收益的敏感度，导致风险偏好不对称。</p>
       <div class="bias-example">投资者死守亏损股票不愿割肉，却快速卖出盈利股票&mdash;&mdash;因为"实现亏损"比"感觉亏损"更痛苦。</div>
     </div>
 
-    <div class="bias-card">
+    <div class="bias-card animate-on-scroll card-stagger" style="--i: 3">
       <div class="bias-num">04 &mdash; FRAMING</div>
       <h4>框架效应</h4>
       <p>同一个问题的不同表述方式，会导致完全不同的选择。系统1对"措辞"极度敏感，而系统2很少去追问"这只是在换一种说法吗"。</p>
       <div class="bias-example">「存活率90%」 vs 「死亡率10%」&mdash;&mdash;医生选前者时更愿意推荐手术，虽然两者是同一件事。</div>
     </div>
 
-    <div class="bias-card">
+    <div class="bias-card animate-on-scroll card-stagger" style="--i: 4">
       <div class="bias-num">05 &mdash; WYSIATI</div>
       <h4>所见即所有</h4>
       <p>What You See Is All There Is. 系统1只用手头现有的信息构建连贯的故事，根本不会去想"我还遗漏了什么"。证据不足时，它照样自信。</p>
       <div class="bias-example">面试官根据10分钟对话就断定候选人"不靠谱"，却没意识到自己只看到了极小一部分信息。</div>
     </div>
 
-    <div class="bias-card">
+    <div class="bias-card animate-on-scroll card-stagger" style="--i: 5">
       <div class="bias-num">06 &mdash; SUBSTITUTION</div>
       <h4>替代效应</h4>
       <p>面对困难问题，系统1会悄悄把它替换成一个简单的问题来回答&mdash;&mdash;你以为你在回答"这个项目值得投吗"，实际上你回答的是"我喜不喜欢这个项目"。</p>
       <div class="bias-example">「这位候选人能胜任吗？」被替换为「这位候选人让我感觉如何？」&mdash;&mdash;光环效应由此产生。</div>
     </div>
 
-    <div class="bias-card">
+    <div class="bias-card animate-on-scroll card-stagger" style="--i: 6">
       <div class="bias-num">07 &mdash; OVERCONFIDENCE</div>
       <h4>过度自信</h4>
       <p>我们对自己"知道"的事情确信过头，对自己"不知道"的事情缺乏自知。系统1天生擅长构建自信的因果故事，事后还觉得一切"理所当然"。</p>
       <div class="bias-example">创业者创业前都觉得自己成功率远超平均水平&mdash;&mdash;否则就不会创业了。</div>
     </div>
 
-    <div class="bias-card">
+    <div class="bias-card animate-on-scroll card-stagger" style="--i: 7">
       <div class="bias-num">08 &mdash; HINDSIGHT</div>
       <h4>后见之明</h4>
       <p>事情发生后，我们觉得"我早就知道会这样"。系统1会自动重写记忆，让结果看起来不可避免&mdash;&mdash;这让我们高估了自己的预测能力。</p>
       <div class="bias-example">金融危机后人人都说"早该看出泡沫"&mdash;&mdash;但在泡沫中，几乎没人看出来。</div>
     </div>
 
-    <div class="bias-card">
+    <div class="bias-card animate-on-scroll card-stagger" style="--i: 8">
       <div class="bias-num">09 &mdash; PEAK-END</div>
       <h4>峰终定律</h4>
       <p>记忆自我评价一段经历时，只看两个时刻：最强烈的瞬间（峰）和结束时的感受（终）。持续时间长短几乎被完全忽略。</p>
       <div class="bias-example">一次出差如果最后一天很顺利，整段出差的记忆就偏正面&mdash;&mdash;哪怕前四天都是灾难。</div>
     </div>
 
-    <div class="bias-card">
+    <div class="bias-card animate-on-scroll card-stagger" style="--i: 9">
       <div class="bias-num">10 &mdash; HALO EFFECT</div>
       <h4>光环效应</h4>
       <p>一个突出的正面特征（长相好看、名校毕业）会"晕染"整体评价。系统1先形成好感，再用这个好感填充所有未知维度。</p>
@@ -644,7 +669,7 @@
   </div>
 
   <!-- 全书章节脉络 -->
-  <h2 class="section-title">全书章节脉络</h2>
+  <h2 class="section-title animate-on-scroll">全书章节脉络</h2>
   <ol class="chapter-list">
     <li>
       <div class="chapter-num">1</div>
@@ -684,35 +709,35 @@
   </ol>
 
   <!-- 金句摘录 -->
-  <h2 class="section-title">金句摘录</h2>
+  <h2 class="section-title animate-on-scroll">金句摘录</h2>
 
-  <div class="quote-block">
+  <div class="quote-block animate-on-scroll">
     <p>我们对自己认为自己知道的东西，过于自信了。对自己的所见所闻，也太容易接受表面意义了。我们并没有花足够的时间去问：「这合理吗？」</p>
     <p class="quote-source">&mdash;&mdash; 第三部分：关于过度自信的本质</p>
   </div>
 
-  <div class="quote-block">
+  <div class="quote-block animate-on-scroll">
     <p>生活中没有什么事情，在你想到它的时候，会比你没在想它的时候更重要。</p>
     <p class="quote-source">&mdash;&mdash; 第五部分：聚焦错觉 (Focusing Illusion)</p>
   </div>
 
-  <div class="quote-block">
+  <div class="quote-block animate-on-scroll">
     <p>系统1不善于思考「不是」&mdash;&mdash;它习惯于相信和确认。怀疑和否定的功能属于系统2，但系统2太懒了，经常不在线。</p>
     <p class="quote-source">&mdash;&mdash; 第一部分：系统1的特征</p>
   </div>
 
-  <div class="quote-block">
+  <div class="quote-block animate-on-scroll">
     <p>人们对损失的厌恶远强于对等量收益的渴望。失去100美元的痛苦，大约是得到100美元快乐的两倍。这种不对称深刻地塑造了人类的所有风险决策。</p>
     <p class="quote-source">&mdash;&mdash; 第四部分：前景理论与损失厌恶</p>
   </div>
 
-  <div class="quote-block">
+  <div class="quote-block animate-on-scroll">
     <p>我们可以轻松认出别人身上的认知偏误，却对自己的视而不见。这种"盲点"本身就是系统1的又一个特征：它擅长维护一个连贯的、自信的自我叙事。</p>
     <p class="quote-source">&mdash;&mdash; 结语：关于认知偏误的元认知</p>
   </div>
 
   <!-- 对工作与决策的行动启发 -->
-  <h2 class="section-title">对工作与决策的行动启发</h2>
+  <h2 class="section-title animate-on-scroll">对工作与决策的行动启发</h2>
   <ul class="action-list">
     <li><strong>重要决策前，先列出"锚"</strong> 在谈判、估值、定价前，先问自己："我脑海里的第一个数字是哪来的？"主动检查锚点来源，防止被无关信息锚定。</li>
     <li><strong>用清单对抗系统1的直觉</strong> 投资决策、人才评估、项目立项等高风险判断中，建立结构化清单。系统2虽然懒惰，但清单能强制它逐项检验，降低WYSIATI的影响。</li>
@@ -724,7 +749,7 @@
   </ul>
 
   <!-- 适合谁读 -->
-  <h2 class="section-title">适合谁读</h2>
+  <h2 class="section-title animate-on-scroll">适合谁读</h2>
   <div class="audience-tags">
     <span class="audience-tag">产品经理与决策者</span>
     <span class="audience-tag">投资者</span>
@@ -803,6 +828,17 @@
 </dialog>
 
 <script src="../../assets/comments.js"></script>
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+</script>
 
 </body>
 </html>

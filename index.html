@@ -35,6 +35,11 @@
     position: relative;
     z-index: 2;
     padding: 3rem 2rem;
+    animation: heroFadeIn 1s ease-out both;
+  }
+  @keyframes heroFadeIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
   .hero-tag {
     display: inline-block;
@@ -69,6 +74,13 @@
     max-width: 1100px;
     margin: 0 auto;
     padding: 3rem 2rem 5rem;
+  }
+  .shelf-section.reveal {
+    animation: shelfReveal 0.8s 0.3s ease-out both;
+  }
+  @keyframes shelfReveal {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
   .shelf-header {
     text-align: center;
@@ -432,7 +444,7 @@
   </header>
 
   <!-- Bookshelf -->
-  <section class="shelf-section">
+  <section class="shelf-section reveal-on-load">
     <div class="shelf-header">
       <h2>书架</h2>
       <p>翻开的每一本书，都是一次思维的重塑</p>
@@ -504,6 +516,18 @@
       <a href="https://github.com/Acidache/reading-notes-mindset" target="_blank" rel="noopener">GitHub</a>
     </p>
   </footer>
+
+<script>
+  // Reveal shelf section on load
+  const shelf = document.querySelector('.reveal-on-load');
+  if (shelf) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => shelf.classList.add('reveal'));
+    } else {
+      shelf.classList.add('reveal');
+    }
+  }
+</script>
 
 </body>
 </html>

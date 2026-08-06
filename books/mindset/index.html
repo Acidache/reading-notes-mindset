@@ -132,6 +132,32 @@
     padding: 0 1.5rem 5rem;
   }
 
+  /* ===== Scroll-triggered animations ===== */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Cards stagger — each card delays 70ms more than the previous */
+  .animate-on-scroll.card-stagger { transition-delay: calc(var(--i, 0) * 0.07s); }
+  .animate-on-scroll.card-stagger.visible { transition-delay: calc(var(--i, 0) * 0.07s); }
+
+  /* Quote-block left ribbon slide */
+  .quote-block.animate-on-scroll {
+    border-left: 4px solid transparent;
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                border-left-color 0.6s 0.2s ease;
+  }
+  .quote-block.animate-on-scroll.visible {
+    border-left-color: #b5343a;
+  }
+
   /* ===== Section Titles ===== */
   .section-title {
     font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", "Songti SC", Georgia, serif;
@@ -559,7 +585,7 @@
 <main class="container">
 
   <!-- 书籍信息 -->
-  <h2 class="section-title">书籍信息</h2>
+  <h2 class="section-title animate-on-scroll">书籍信息</h2>
   <div class="book-info">
     <div class="info-item">
       <span class="info-label">作者</span>
@@ -580,13 +606,13 @@
   </div>
 
   <!-- 一句话总览 -->
-  <h2 class="section-title">一句话总览</h2>
+  <h2 class="section-title animate-on-scroll">一句话总览</h2>
   <div class="overview-block">
     一个人对自身能力是否<span class="marker">可改变</span>的根本信念，比天赋本身更能预测他在学业、事业、运动、人际关系中的长期成就——这就是<span class="marker">思维模式</span>的力量。
   </div>
 
   <!-- 核心框架对比 -->
-  <h2 class="section-title">核心框架：两种思维模式</h2>
+  <h2 class="section-title animate-on-scroll">核心框架：两种思维模式</h2>
   <div class="comparison">
     <div class="col fixed">
       <span class="col-badge">固定型思维 FIXED MINDSET</span>
@@ -617,52 +643,52 @@
   </div>
 
   <!-- 关键概念卡片 -->
-  <h2 class="section-title">关键概念</h2>
+  <h2 class="section-title animate-on-scroll">关键概念</h2>
   <div class="cards-grid">
 
-    <div class="concept-card">
+    <div class="concept-card animate-on-scroll card-stagger" style="--i: 0">
       <div class="card-num">01 概念</div>
       <h5>能力的可塑性</h5>
       <p>智力商数并非固定值。比奈设计IQ测验的初衷恰恰是识别需要帮助的学生，而非给人贴永久标签。大脑像肌肉，越用越强。</p>
     </div>
 
-    <div class="concept-card">
+    <div class="concept-card animate-on-scroll card-stagger" style="--i: 1">
       <div class="card-num">02 概念</div>
       <h5>努力的意义重构</h5>
       <p>在固定型思维中努力等于承认无能；在成长型思维中，努力本身就是能力的体现。顶级运动员和艺术家无一例外将努力置于天赋之上。</p>
     </div>
 
-    <div class="concept-card">
+    <div class="concept-card animate-on-scroll card-stagger" style="--i: 2">
       <div class="card-num">03 概念</div>
       <h5>失败的重新定义</h5>
       <p>固定型思维者将失败等同于身份标签（"我是个失败者"）；成长型思维者将失败视为事件（"这次没做好"），从中学到东西后继续前进。</p>
     </div>
 
-    <div class="concept-card">
+    <div class="concept-card animate-on-scroll card-stagger" style="--i: 3">
       <div class="card-num">04 概念</div>
       <h5>标签的危险</h5>
       <p>夸孩子"你真聪明"会植入固定型思维——他们开始回避困难任务以维持聪明标签。夸"你很努力"则培养成长型思维，鼓励迎接挑战。</p>
     </div>
 
-    <div class="concept-card">
+    <div class="concept-card animate-on-scroll card-stagger" style="--i: 4">
       <div class="card-num">05 概念</div>
       <h5>CEO 综合征</h5>
       <p>固定型思维的领导者沉迷于证明自己的天才，压制异见、拒绝反馈，最终导致组织僵化。成长型思维的领导者则倾听、信任、培养人。</p>
     </div>
 
-    <div class="concept-card">
+    <div class="concept-card animate-on-scroll card-stagger" style="--i: 5">
       <div class="card-num">06 概念</div>
       <h5>冠军思维</h5>
       <p>迈克尔·乔丹曾被校队淘汰，但他将其视为需要更努力的信号。真正的冠军关注的不是"我是否天生伟大"，而是"我今天比昨天进步了多少"。</p>
     </div>
 
-    <div class="concept-card">
+    <div class="concept-card animate-on-scroll card-stagger" style="--i: 6">
       <div class="card-num">07 概念</div>
       <h5>虚假的成长型思维</h5>
       <p>很多人自称拥有成长型思维，但行为上仍回避挑战、害怕失败。真正的成长型思维需要诚实面对自己的固定型思维部分，并持续练习转变。</p>
     </div>
 
-    <div class="concept-card">
+    <div class="concept-card animate-on-scroll card-stagger" style="--i: 7">
       <div class="card-num">08 概念</div>
       <h5>改变的四步路径</h5>
       <p>接受（承认自己有一部分固定型思维）→ 观察（识别触发它的场景）→ 命名（给它起个名字，人格化）→ 教育（用成长型思维与之对话、引导它）。</p>
@@ -671,7 +697,7 @@
   </div>
 
   <!-- 全书章节脉络 -->
-  <h2 class="section-title">全书章节脉络</h2>
+  <h2 class="section-title animate-on-scroll">全书章节脉络</h2>
   <div class="chapter-map">
 
     <div class="chapter-item">
@@ -741,35 +767,35 @@
   </div>
 
   <!-- 金句 -->
-  <h2 class="section-title">金句摘录</h2>
+  <h2 class="section-title animate-on-scroll">金句摘录</h2>
 
-  <div class="quote-block">
+  <div class="quote-block animate-on-scroll">
     <p class="quote-text">你不需要觉得自己对某件事很在行才愿意去做这件事，并享受做这件事的乐趣。</p>
     <p class="quote-context">—— 第1章：当作者观察到热爱挑战的孩子们后的感悟</p>
   </div>
 
-  <div class="quote-block">
+  <div class="quote-block animate-on-scroll">
     <p class="quote-text">人类在终身学习和大脑发展这一方面比我们自己想象中更有潜力。每个人都有自己独一无二的、先天遗传的才能。可能在最开始的时候，人类会展现出不一样的气质和才能，但很清楚的是，个人经历、能力培训以及个人努力会对之后的人生产生影响。</p>
     <p class="quote-context">—— 第1章：关于能力可塑性的论述</p>
   </div>
 
-  <div class="quote-block">
+  <div class="quote-block animate-on-scroll">
     <p class="quote-text">即使事情发展不顺利时也能拥有这种想要提升自己并坚持不懈的激情，这就是拥有成长型思维模式的人身上的标志。这种思维模式，让人们在人生遭遇重大挑战的时刻，依然可以茁壮成长。</p>
     <p class="quote-context">—— 第1章：成长型思维的定义性描述</p>
   </div>
 
-  <div class="quote-block">
+  <div class="quote-block animate-on-scroll">
     <p class="quote-text">思维模式的转变不是采取一点建议就能完成的，而是意味着用全新的方式看待问题。无论是丈夫与妻子、教练与运动员、经理与员工、父母与子女还是老师与学生，一旦开始用成长型思维模式看待问题，就从评判与被评判的关系转变成了学习与帮助学习的关系。</p>
     <p class="quote-context">—— 第8章：关于思维模式转变的本质</p>
   </div>
 
-  <div class="quote-block">
+  <div class="quote-block animate-on-scroll">
     <p class="quote-text">人们放弃非好即坏、非强即弱这种从固定型思维模式中产生的想法时，就能更好地学习有效的策略，帮助自己控制自己了。每一个小错误都不会导致世界末日，这些错误和成长型思维模式中的其他方面一样，都在提醒你，你不是一个十全十美的人，告诉你下次该怎样才能做得更好。</p>
     <p class="quote-context">—— 第8章：改变与自我控制的关系</p>
   </div>
 
   <!-- 行动启发 -->
-  <h2 class="section-title">对工作与决策的行动启发</h2>
+  <h2 class="section-title animate-on-scroll">对工作与决策的行动启发</h2>
   <ul class="insights-list">
     <li>
       <strong>将「失败」重命名为「数据」</strong>
@@ -798,7 +824,7 @@
   </ul>
 
   <!-- 适合谁读 -->
-  <h2 class="section-title">适合谁读</h2>
+  <h2 class="section-title animate-on-scroll">适合谁读</h2>
   <div class="who-read">
     <h3>这本书特别适合——</h3>
     <div class="tag-list">
@@ -883,6 +909,18 @@
 </dialog>
 
 <script src="../../assets/comments.js"></script>
+<script>
+  // Scroll-triggered reveal animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+</script>
 
 </body>
 </html>
