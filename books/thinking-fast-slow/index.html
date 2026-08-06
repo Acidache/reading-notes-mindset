@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>读书笔记：《思考，快与慢》</title>
+<style>
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: "PingFang SC", "Noto Serif SC", "Source Han Serif SC", "STSong", "Songti SC", Georgia, "Times New Roman", serif;
+    background-color: #f5f0e8;
+    color: #3d3226;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Back to Shelf ===== */
+  .back-to-shelf {
+    position: fixed;
+    top: 1.2rem;
+    left: 1.2rem;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 0.45rem 1rem;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.15);
+    letter-spacing: 0.04em;
+    transition: background 0.2s, color 0.2s;
+  }
+  .back-to-shelf:hover {
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+  }
+  .back-arrow { font-size: 1rem; line-height: 1; }
+  @media (max-width: 480px) {
+    .back-to-shelf {
+      top: 0.8rem; left: 0.8rem;
+      font-size: 0.72rem; padding: 0.35rem 0.8rem;
+    }
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    position: relative;
+    width: 100%;
+    min-height: 75vh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, rgba(10,25,35,0.35) 0%, rgba(10,25,35,0.55) 30%, rgba(10,25,35,0.92) 100%),
+      linear-gradient(0deg, rgba(20,60,80,0.3) 0%, transparent 50%),
+      url('https://images.unsplash.com/photo-1532012197267-da84d127e765?w=1920&q=80&fit=crop') center 35% / cover no-repeat;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 80%, rgba(100,180,200,0.20) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 6rem 2rem 5rem;
+    max-width: 800px;
+  }
+  .hero-label {
+    display: inline-block;
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(180,210,220,0.8);
+    border: 1px solid rgba(180,210,220,0.3);
+    padding: 0.4rem 1.5rem;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  .hero .subtitle {
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    color: rgba(255,255,255,0.8);
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    margin-bottom: 1rem;
+  }
+  .hero .author {
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.85rem;
+    color: rgba(180,210,220,0.7);
+    letter-spacing: 0.04em;
+  }
+  .hero .author span {
+    display: block;
+    font-size: 0.75rem;
+    margin-top: 0.2rem;
+    opacity: 0.8;
+  }
+
+  /* ===== Ribbon ===== */
+  .ribbon-wrap {
+    text-align: center;
+    padding: 0;
+  }
+  .ribbon {
+    display: inline-block;
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.85rem;
+    color: #fff;
+    background: linear-gradient(135deg, #1a5276 0%, #2e86c1 100%);
+    padding: 0.6rem 2rem;
+    letter-spacing: 0.08em;
+    position: relative;
+    top: -1.2rem;
+    box-shadow: 0 4px 15px rgba(26,82,118,0.3);
+  }
+
+  /* ===== Container ===== */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem 2rem 4rem;
+  }
+
+  /* ===== Section Title ===== */
+  .section-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a5276;
+    margin: 3rem 0 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(46,134,193,0.2);
+    letter-spacing: 0.04em;
+  }
+  .section-title:first-child { margin-top: 1rem; }
+
+  /* ===== Book Info ===== */
+  .book-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .info-item {
+    background: #fff;
+    padding: 1.2rem 1.5rem;
+    border-radius: 4px;
+    border-left: 3px solid #2e86c1;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .info-label {
+    display: block;
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.75rem;
+    color: #8b7355;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+  }
+  .info-value {
+    font-size: 0.95rem;
+    color: #3d3226;
+    font-weight: 500;
+  }
+
+  /* ===== Overview ===== */
+  .overview {
+    background: #fff;
+    padding: 2rem 2.5rem;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    border-left: 4px solid #2e86c1;
+    margin-bottom: 1rem;
+  }
+  .overview p {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: #3d3226;
+  }
+
+  /* ===== Two Systems Comparison ===== */
+  .systems-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .system-card {
+    background: #fff;
+    padding: 2rem 1.8rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+  .system-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+  .system-1::before { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+  .system-2::before { background: linear-gradient(90deg, #2e86c1, #1a5276); }
+  .system-tag {
+    display: inline-block;
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    padding: 0.25rem 0.8rem;
+    border-radius: 100px;
+    margin-bottom: 0.8rem;
+  }
+  .system-1 .system-tag { background: rgba(231,76,60,0.1); color: #c0392b; }
+  .system-2 .system-tag { background: rgba(46,134,193,0.1); color: #1a5276; }
+  .system-card h3 {
+    font-size: 1.15rem;
+    margin-bottom: 0.4rem;
+    color: #3d3226;
+  }
+  .system-card .system-subtitle {
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.82rem;
+    color: #8b7355;
+    margin-bottom: 1.2rem;
+  }
+  .system-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .system-card li {
+    font-size: 0.9rem;
+    color: #5a4a3a;
+    padding: 0.4rem 0;
+    padding-left: 1.2rem;
+    position: relative;
+    border-bottom: 1px solid rgba(139,115,85,0.08);
+    line-height: 1.6;
+  }
+  .system-card li:last-child { border-bottom: none; }
+  .system-card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.75rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+  .system-1 li::before { background: #e74c3c; }
+  .system-2 li::before { background: #2e86c1; }
+
+  /* ===== Bias Cards ===== */
+  .bias-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .bias-card {
+    background: #fff;
+    padding: 1.5rem 1.8rem;
+    border-radius: 6px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+    border-top: 3px solid #2e86c1;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .bias-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  .bias-num {
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.7rem;
+    color: #2e86c1;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.3rem;
+  }
+  .bias-card h4 {
+    font-size: 1.05rem;
+    color: #1a5276;
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.02em;
+  }
+  .bias-card p {
+    font-size: 0.88rem;
+    color: #5a4a3a;
+    line-height: 1.7;
+  }
+  .bias-example {
+    margin-top: 0.8rem;
+    padding: 0.6rem 0.8rem;
+    background: rgba(46,134,193,0.05);
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #6b5b4b;
+    font-style: italic;
+  }
+
+  /* ===== Chapter Map ===== */
+  .chapter-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+  }
+  .chapter-list li {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(139,115,85,0.12);
+    align-items: flex-start;
+  }
+  .chapter-list li:last-child { border-bottom: none; }
+  .chapter-num {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #2e86c1, #1a5276);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .chapter-content h4 {
+    font-size: 0.95rem;
+    color: #3d3226;
+    margin-bottom: 0.2rem;
+  }
+  .chapter-content p {
+    font-size: 0.85rem;
+    color: #6b5b4b;
+    line-height: 1.6;
+  }
+
+  /* ===== Quotes ===== */
+  .quote-block {
+    margin: 1.5rem 0;
+    padding: 1.5rem 2rem;
+    background: #fff;
+    border-radius: 4px;
+    border-left: 4px solid #2e86c1;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    position: relative;
+  }
+  .quote-block::before {
+    content: '"';
+    position: absolute;
+    top: -0.3rem;
+    left: 0.8rem;
+    font-size: 3.5rem;
+    color: rgba(46,134,193,0.15);
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+  .quote-block p {
+    font-size: 1rem;
+    color: #3d3226;
+    line-height: 1.8;
+    margin-bottom: 0.5rem;
+    font-style: italic;
+  }
+  .quote-block .quote-source {
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.78rem;
+    color: #8b7355;
+    text-align: right;
+  }
+
+  /* ===== Action ===== */
+  .action-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+  }
+  .action-list li {
+    background: #fff;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 0.8rem;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    border-left: 3px solid #27ae60;
+    font-size: 0.9rem;
+    color: #5a4a3a;
+    line-height: 1.7;
+  }
+  .action-list strong {
+    color: #1a5276;
+    font-weight: 600;
+  }
+
+  /* ===== Audience ===== */
+  .audience-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+  }
+  .audience-tag {
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.82rem;
+    color: #1a5276;
+    background: rgba(46,134,193,0.08);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    border: 1px solid rgba(46,134,193,0.15);
+    letter-spacing: 0.02em;
+  }
+
+  /* ===== Footer ===== */
+  .reading-footer {
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid rgba(139,115,85,0.15);
+    margin-top: 3rem;
+  }
+  .reading-footer p {
+    font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 0.8rem;
+    color: #a09080;
+    letter-spacing: 0.06em;
+  }
+
+  /* ===== Scroll Top ===== */
+  .scroll-top {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 42px;
+    height: 42px;
+    background: rgba(26,82,118,0.85);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s, background 0.2s;
+    z-index: 99;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  }
+  .scroll-top.visible { opacity: 1; }
+  .scroll-top:hover { background: rgba(26,82,118,1); }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    .hero { min-height: 60vh; }
+    .hero-content { padding: 4rem 1.5rem 3rem; }
+    .container { padding: 0.5rem 1.2rem 3rem; }
+    .systems-grid { grid-template-columns: 1fr; }
+    .bias-grid { grid-template-columns: 1fr; }
+    .book-info { grid-template-columns: 1fr; }
+    .overview { padding: 1.5rem; }
+    .section-title { font-size: 1.2rem; }
+    .chapter-num { width: 36px; height: 36px; font-size: 0.75rem; }
+    .scroll-top { bottom: 1.2rem; right: 1.2rem; width: 36px; height: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="../../" class="back-to-shelf"><span class="back-arrow">&larr;</span> 返回书架</a>
+
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <div class="hero-content">
+    <div class="hero-label">读 书 笔 记</div>
+    <h1>思考，快与慢</h1>
+    <p class="subtitle">人类判断的两套系统与认知偏误全景</p>
+    <p class="author">[美] 丹尼尔·卡尼曼 <span>Thinking, Fast and Slow</span></p>
+  </div>
+</header>
+
+<div class="ribbon-wrap">
+  <div class="ribbon">核 心 命 题 ： 你 的 大 脑 里 有 两 个 系 统 ， 它 们 的 相 互 作 用 决 定 了 你 的 每 一 个 判 断</div>
+</div>
+
+<!-- ===== Main Content ===== -->
+<main class="container">
+
+  <!-- 书籍信息 -->
+  <h2 class="section-title">书籍信息</h2>
+  <div class="book-info">
+    <div class="info-item">
+      <span class="info-label">作者</span>
+      <span class="info-value">丹尼尔·卡尼曼 (Daniel Kahneman)</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">领域</span>
+      <span class="info-value">行为经济学 / 认知心理学 / 决策科学</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">作者背景</span>
+      <span class="info-value">普林斯顿大学心理学荣休教授，2002年诺贝尔经济学奖得主，行为经济学奠基人</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">核心命题</span>
+      <span class="info-value">系统1（快思考）vs 系统2（慢思考）&mdash; 人类判断错误的根源</span>
+    </div>
+  </div>
+
+  <!-- 一句话总览 -->
+  <h2 class="section-title">一句话总览</h2>
+  <div class="overview">
+    <p>人类的大脑有两套认知系统：快速、直觉、自动的系统1，和缓慢、理性、需投入努力的系统2。我们以为自己在用理性做决策，实际上大多数时候是系统1在自动运行&mdash;&mdash;而它充满了可预测的偏误。</p>
+  </div>
+
+  <!-- 核心框架：双系统 -->
+  <h2 class="section-title">核心框架：两个系统</h2>
+  <div class="systems-grid">
+    <div class="system-card system-1">
+      <div class="system-tag">SYSTEM 1 &mdash; 快思考</div>
+      <h3>系统1：直觉系统</h3>
+      <p class="system-subtitle">自动、快速、无意识、无需努力</p>
+      <ul>
+        <li>始终在线，无法关闭</li>
+        <li>并行处理，快速反应</li>
+        <li>依赖直觉、经验、情感</li>
+        <li>掌控日常95%以上的判断</li>
+        <li>擅长模式识别和联想</li>
+        <li>容易受情绪和环境影响</li>
+        <li>典型表现：2+2=？瞬间回答</li>
+        <li>典型句式：「我感觉是这样」</li>
+      </ul>
+    </div>
+    <div class="system-card system-2">
+      <div class="system-tag">SYSTEM 2 &mdash; 慢思考</div>
+      <h3>系统2：理性系统</h3>
+      <p class="system-subtitle">缓慢、刻意的、有意识的、需要付出努力</p>
+      <ul>
+        <li>按需启动，非常"懒惰"</li>
+        <li>串行处理，速度慢</li>
+        <li>依赖逻辑、规则、计算</li>
+        <li>处理复杂推理和决策</li>
+        <li>消耗大量认知资源</li>
+        <li>能覆写系统1的判断，但很少这么做</li>
+        <li>典型表现：17&times;24=？需要动笔</li>
+        <li>典型句式：「让我想想」</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 关键认知偏误 -->
+  <h2 class="section-title">关键认知偏误</h2>
+  <div class="bias-grid">
+
+    <div class="bias-card">
+      <div class="bias-num">01 &mdash; ANCHORING</div>
+      <h4>锚定效应</h4>
+      <p>系统1会抓住最先出现的信息（"锚"）不放，后续判断都围绕这个锚做调整&mdash;&mdash;但调整往往远远不够。</p>
+      <div class="bias-example">实验：先看身份证号再估 Gandhi 的寿命，编号越大，估计的年龄越高。</div>
+    </div>
+
+    <div class="bias-card">
+      <div class="bias-num">02 &mdash; AVAILABILITY</div>
+      <h4>可得性启发</h4>
+      <p>越容易回想起的事件，我们越觉得它常发生。系统1用"想起来的容易程度"替代了"实际概率"的判断。</p>
+      <div class="bias-example">飞机失事新闻密集播出后，人们高估空难概率，低估车祸概率&mdash;&mdash;虽然车祸致死率远高于空难。</div>
+    </div>
+
+    <div class="bias-card">
+      <div class="bias-num">03 &mdash; LOSS AVERSION</div>
+      <h4>损失厌恶</h4>
+      <p>失去100元带来的痛苦，大约是获得100元带来快乐的两倍。人对损失的敏感度远超对收益的敏感度，导致风险偏好不对称。</p>
+      <div class="bias-example">投资者死守亏损股票不愿割肉，却快速卖出盈利股票&mdash;&mdash;因为"实现亏损"比"感觉亏损"更痛苦。</div>
+    </div>
+
+    <div class="bias-card">
+      <div class="bias-num">04 &mdash; FRAMING</div>
+      <h4>框架效应</h4>
+      <p>同一个问题的不同表述方式，会导致完全不同的选择。系统1对"措辞"极度敏感，而系统2很少去追问"这只是在换一种说法吗"。</p>
+      <div class="bias-example">「存活率90%」 vs 「死亡率10%」&mdash;&mdash;医生选前者时更愿意推荐手术，虽然两者是同一件事。</div>
+    </div>
+
+    <div class="bias-card">
+      <div class="bias-num">05 &mdash; WYSIATI</div>
+      <h4>所见即所有</h4>
+      <p>What You See Is All There Is. 系统1只用手头现有的信息构建连贯的故事，根本不会去想"我还遗漏了什么"。证据不足时，它照样自信。</p>
+      <div class="bias-example">面试官根据10分钟对话就断定候选人"不靠谱"，却没意识到自己只看到了极小一部分信息。</div>
+    </div>
+
+    <div class="bias-card">
+      <div class="bias-num">06 &mdash; SUBSTITUTION</div>
+      <h4>替代效应</h4>
+      <p>面对困难问题，系统1会悄悄把它替换成一个简单的问题来回答&mdash;&mdash;你以为你在回答"这个项目值得投吗"，实际上你回答的是"我喜不喜欢这个项目"。</p>
+      <div class="bias-example">「这位候选人能胜任吗？」被替换为「这位候选人让我感觉如何？」&mdash;&mdash;光环效应由此产生。</div>
+    </div>
+
+    <div class="bias-card">
+      <div class="bias-num">07 &mdash; OVERCONFIDENCE</div>
+      <h4>过度自信</h4>
+      <p>我们对自己"知道"的事情确信过头，对自己"不知道"的事情缺乏自知。系统1天生擅长构建自信的因果故事，事后还觉得一切"理所当然"。</p>
+      <div class="bias-example">创业者创业前都觉得自己成功率远超平均水平&mdash;&mdash;否则就不会创业了。</div>
+    </div>
+
+    <div class="bias-card">
+      <div class="bias-num">08 &mdash; HINDSIGHT</div>
+      <h4>后见之明</h4>
+      <p>事情发生后，我们觉得"我早就知道会这样"。系统1会自动重写记忆，让结果看起来不可避免&mdash;&mdash;这让我们高估了自己的预测能力。</p>
+      <div class="bias-example">金融危机后人人都说"早该看出泡沫"&mdash;&mdash;但在泡沫中，几乎没人看出来。</div>
+    </div>
+
+    <div class="bias-card">
+      <div class="bias-num">09 &mdash; PEAK-END</div>
+      <h4>峰终定律</h4>
+      <p>记忆自我评价一段经历时，只看两个时刻：最强烈的瞬间（峰）和结束时的感受（终）。持续时间长短几乎被完全忽略。</p>
+      <div class="bias-example">一次出差如果最后一天很顺利，整段出差的记忆就偏正面&mdash;&mdash;哪怕前四天都是灾难。</div>
+    </div>
+
+    <div class="bias-card">
+      <div class="bias-num">10 &mdash; HALO EFFECT</div>
+      <h4>光环效应</h4>
+      <p>一个突出的正面特征（长相好看、名校毕业）会"晕染"整体评价。系统1先形成好感，再用这个好感填充所有未知维度。</p>
+      <div class="bias-example">长得好看的候选人面试评分更高&mdash;&mdash;面试官觉得他"沟通能力也更好"，虽然这和长相毫无关系。</div>
+    </div>
+
+  </div>
+
+  <!-- 全书章节脉络 -->
+  <h2 class="section-title">全书章节脉络</h2>
+  <ol class="chapter-list">
+    <li>
+      <div class="chapter-num">1</div>
+      <div class="chapter-content">
+        <h4>第一部分：两个系统</h4>
+        <p>引入系统1和系统2的概念框架。系统1自动产生印象和直觉，系统2负责监督和覆写。讨论系统2的"懒惰"&mdash;&mdash;它经常接受系统1的建议而不加验证，导致可预测的错误。</p>
+      </div>
+    </li>
+    <li>
+      <div class="chapter-num">2</div>
+      <div class="chapter-content">
+        <h4>第二部分：启发法与偏见</h4>
+        <p>系统atically梳理系统1导致的主要认知偏误：锚定效应、可得性启发、代表性启发、小数定律、回归均值等。核心观点：这些偏误不是随机的，而是可预测的系统特征。</p>
+      </div>
+    </li>
+    <li>
+      <div class="chapter-num">3</div>
+      <div class="chapter-content">
+        <h4>第三部分：过度自信</h4>
+        <p>深入探讨人类对自身判断力的过度自信：后见之明、结果偏见、叙事谬误、WYSIATI。揭示"专家直觉"的边界&mdash;&mdash;在不规律环境中，专家判断可能不如简单公式。</p>
+      </div>
+    </li>
+    <li>
+      <div class="chapter-num">4</div>
+      <div class="chapter-content">
+        <h4>第四部分：选择</h4>
+        <p>前景理论的核心：人对损失的厌恶远超对等量收益的渴望。讨论确定性效应、概率加权、禀赋效应。这一部分推翻了传统经济学的理性人假设，奠定了行为经济学的基础。</p>
+      </div>
+    </li>
+    <li>
+      <div class="chapter-num">5</div>
+      <div class="chapter-content">
+        <h4>第五部分：两个自我</h4>
+        <p>区分"体验自我"（活在当下）和"记忆自我"（讲故事的人）。峰终定律和时长忽视揭示：我们对经历的记忆，并不等于经历本身的实际感受。这直接影响我们对未来的决策。</p>
+      </div>
+    </li>
+  </ol>
+
+  <!-- 金句摘录 -->
+  <h2 class="section-title">金句摘录</h2>
+
+  <div class="quote-block">
+    <p>我们对自己认为自己知道的东西，过于自信了。对自己的所见所闻，也太容易接受表面意义了。我们并没有花足够的时间去问：「这合理吗？」</p>
+    <p class="quote-source">&mdash;&mdash; 第三部分：关于过度自信的本质</p>
+  </div>
+
+  <div class="quote-block">
+    <p>生活中没有什么事情，在你想到它的时候，会比你没在想它的时候更重要。</p>
+    <p class="quote-source">&mdash;&mdash; 第五部分：聚焦错觉 (Focusing Illusion)</p>
+  </div>
+
+  <div class="quote-block">
+    <p>系统1不善于思考「不是」&mdash;&mdash;它习惯于相信和确认。怀疑和否定的功能属于系统2，但系统2太懒了，经常不在线。</p>
+    <p class="quote-source">&mdash;&mdash; 第一部分：系统1的特征</p>
+  </div>
+
+  <div class="quote-block">
+    <p>人们对损失的厌恶远强于对等量收益的渴望。失去100美元的痛苦，大约是得到100美元快乐的两倍。这种不对称深刻地塑造了人类的所有风险决策。</p>
+    <p class="quote-source">&mdash;&mdash; 第四部分：前景理论与损失厌恶</p>
+  </div>
+
+  <div class="quote-block">
+    <p>我们可以轻松认出别人身上的认知偏误，却对自己的视而不见。这种"盲点"本身就是系统1的又一个特征：它擅长维护一个连贯的、自信的自我叙事。</p>
+    <p class="quote-source">&mdash;&mdash; 结语：关于认知偏误的元认知</p>
+  </div>
+
+  <!-- 对工作与决策的行动启发 -->
+  <h2 class="section-title">对工作与决策的行动启发</h2>
+  <ul class="action-list">
+    <li><strong>重要决策前，先列出"锚"</strong> 在谈判、估值、定价前，先问自己："我脑海里的第一个数字是哪来的？"主动检查锚点来源，防止被无关信息锚定。</li>
+    <li><strong>用清单对抗系统1的直觉</strong> 投资决策、人才评估、项目立项等高风险判断中，建立结构化清单。系统2虽然懒惰，但清单能强制它逐项检验，降低WYSIATI的影响。</li>
+    <li><strong>主动寻找反面证据</strong> 系统1天生寻找确认而非证伪。做决策时刻意问："什么证据能推翻我的判断？"如果找不到，再问："我是不是没找到？"</li>
+    <li><strong>拆解"框架"再决策</strong> 同一个方案用"收益"和"损失"两种表述各写一遍。如果你在两种表述下做出了不同选择，说明框架效应在影响你，而非方案本身。</li>
+    <li><strong>警惕"自信"当"正确"</strong> 表达流畅、逻辑自洽、充满自信&mdash;&mdash;这些是系统1的特征，不是系统2的结论。越是对自己"感觉对"的判断，越要多问一句"依据是什么"。</li>
+    <li><strong>用"事前验尸"对抗后见之明</strong> 在项目启动前就假设"项目已经失败了"，让团队倒推失败原因。这能在事后被归因于"早该看出"的问题，提前暴露在事前。</li>
+    <li><strong>区分体验与记忆</strong> 评估一段经历（出差、培训、合作）时，不要只凭最后的感受。问自己："过程中大多数时候的实际体验如何？"避免被峰终定律误导。</li>
+  </ul>
+
+  <!-- 适合谁读 -->
+  <h2 class="section-title">适合谁读</h2>
+  <div class="audience-tags">
+    <span class="audience-tag">产品经理与决策者</span>
+    <span class="audience-tag">投资者</span>
+    <span class="audience-tag">管理者</span>
+    <span class="audience-tag">数据分析师</span>
+    <span class="audience-tag">营销人员</span>
+    <span class="audience-tag">创业者</span>
+    <span class="audience-tag">面试官</span>
+    <span class="audience-tag">想要减少决策错误的人</span>
+    <span class="audience-tag">对行为经济学感兴趣的人</span>
+  </div>
+
+  <div class="reading-footer">
+    <p>读书笔记 &middot; 《思考，快与慢》丹尼尔·卡尼曼</p>
+    <p style="margin-top:0.3rem;">整理于 2026 年 8 月 &middot; 仅供个人学习参考</p>
+  </div>
+
+</main>
+
+<button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部">&uarr;</button>
+
+<script>
+  const scrollBtn = document.querySelector('.scroll-top');
+  window.addEventListener('scroll', () => {
+    scrollBtn.classList.toggle('visible', window.scrollY > 600);
+  });
+</script>
+
+</body>
+</html>
