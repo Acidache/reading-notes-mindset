@@ -535,6 +535,7 @@
     }
   }
 </style>
+  <link rel="stylesheet" href="../../assets/comments.css">
 </head>
 <body>
 
@@ -813,6 +814,15 @@
     </div>
   </div>
 
+  <!-- Comment trigger -->
+  <div class="comment-section">
+    <button class="comment-trigger js-open-discussion" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      留下评论
+    </button>
+    <p style="margin-top:8px;color:#9a8b7a;font-size:13px;">首次留言需使用 GitHub 账号登录</p>
+  </div>
+
   <!-- Colophon -->
   <div class="colophon">
     <p>读书笔记 · 《终身成长》卡罗尔·德韦克</p>
@@ -825,12 +835,54 @@
 <button class="scroll-top" id="scrollTop" aria-label="回到顶部">&uarr;</button>
 
 <script>
-  const btn = document.getElementById('scrollTop');
+  const scrollBtn = document.querySelector('.scroll-top');
   window.addEventListener('scroll', () => {
-    btn.classList.toggle('visible', window.scrollY > 500);
+    scrollBtn.classList.toggle('visible', window.scrollY > 500);
   });
-  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 </script>
+
+<!-- ===== Giscus 评论弹窗 ===== -->
+<dialog class="discussion-panel" id="discussion-panel" aria-labelledby="discussion-title">
+  <div class="panel-shell">
+    <header class="panel-header">
+      <div>
+        <div class="panel-kicker">DISCUSSION</div>
+        <h2 id="discussion-title">读者评论</h2>
+      </div>
+      <button class="panel-close" id="discussion-close" type="button">关闭</button>
+    </header>
+    <div class="panel-content">
+      <div class="discussion-card">
+        <p class="discussion-intro">关于《终身成长》，你有什么想法？欢迎留下评论。首次留言需要使用 GitHub 账号登录。</p>
+        <script src="https://giscus.app/client.js"
+                data-repo="Acidache/reading-notes-mindset"
+                data-repo-id="R_kgDOTvUWjg"
+                data-category="General"
+                data-category-id="DIC_kwDOTvUWjs4DCx06"
+                data-mapping="pathname"
+                data-strict="1"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="light"
+                data-lang="zh-CN"
+                crossorigin="anonymous"
+                async>
+        </script>
+        <noscript>
+          <p class="discussion-note">需要启用 JavaScript 才能显示评论区。你也可以直接前往
+            <a href="https://github.com/Acidache/reading-notes-mindset/discussions">GitHub Discussions</a>
+            参与讨论。
+          </p>
+        </noscript>
+        <p class="discussion-note">评论由 <a href="https://giscus.app/zh-CN" rel="noopener noreferrer">giscus</a> 与 GitHub Discussions 提供；登录和评论遵循 GitHub 的隐私政策与社区规则。</p>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script src="../../assets/comments.js"></script>
 
 </body>
 </html>

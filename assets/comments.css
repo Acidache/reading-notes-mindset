@@ -1,0 +1,219 @@
+/* ===== Giscus 评论弹窗样式 — 读书笔记风格 ===== */
+
+body.panel-open {
+  overflow: hidden;
+}
+
+/* 评论区容器 */
+.comment-section {
+  text-align: center;
+  padding: 36px 0 28px;
+}
+
+/* 评论触发按钮 */
+.comment-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border: 2px solid #c0392b;
+  border-radius: 8px;
+  color: #c0392b;
+  background: transparent;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.comment-trigger:hover,
+.comment-trigger:focus-visible {
+  background: #c0392b;
+  color: #fff;
+  outline: none;
+}
+
+.comment-trigger svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* 弹窗面板 */
+dialog.discussion-panel {
+  display: none !important;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+dialog.discussion-panel[open] {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+}
+
+dialog.discussion-panel::backdrop {
+  background: transparent;
+}
+
+.panel-shell {
+  display: flex;
+  flex-direction: column;
+  width: min(780px, calc(100vw - 32px));
+  max-height: min(88vh, 760px);
+  border-radius: 14px;
+  background: #faf6f0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  animation: panel-slide-up 0.28s ease;
+}
+
+@keyframes panel-slide-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 60px;
+  padding: 14px 22px;
+  border-bottom: 1px solid #e0d5c5;
+  background: linear-gradient(135deg, #f5ede0 0%, #faf6f0 100%);
+  flex-shrink: 0;
+}
+
+.panel-kicker {
+  margin: 0;
+  color: #c0392b;
+  font-family: "Georgia", "Noto Serif SC", serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.panel-header h2 {
+  margin: 3px 0 0;
+  color: #2c1810;
+  font-family: "Georgia", "Noto Serif SC", serif;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.panel-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid #d4c8b6;
+  border-radius: 8px;
+  color: #6b5e50;
+  background: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.panel-close:hover,
+.panel-close:focus-visible {
+  border-color: #c0392b;
+  color: #c0392b;
+  background: #fdf6f0;
+  outline: 3px solid rgba(192, 57, 43, 0.12);
+}
+
+.panel-content {
+  flex: 1;
+  min-height: 0;
+  padding: 18px 22px 24px;
+  overflow-y: auto;
+}
+
+.discussion-card {
+  min-height: 300px;
+}
+
+.discussion-intro {
+  margin: 0 0 18px;
+  color: #5a4d40;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.discussion-note {
+  margin-top: 16px;
+  color: #9a8b7a;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.discussion-note a {
+  color: #8b5e3c;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.discussion-note a:hover {
+  color: #c0392b;
+}
+
+/* giscus 容器 */
+.giscus,
+.giscus-frame {
+  width: 100% !important;
+}
+
+/* 移动端适配 */
+@media (max-width: 640px) {
+  .panel-shell {
+    width: calc(100vw - 16px);
+    max-height: calc(100vh - 32px);
+    border-radius: 12px;
+  }
+
+  .panel-header {
+    padding: 12px 16px;
+    min-height: 52px;
+  }
+
+  .panel-header h2 {
+    font-size: 17px;
+  }
+
+  .panel-content {
+    padding: 14px 16px 20px;
+  }
+
+  .comment-trigger {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 24px;
+    font-size: 16px;
+  }
+}
