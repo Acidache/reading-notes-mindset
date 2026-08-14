@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>技术的本质 · 读书笔记</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/comments.css">
+<style>
+  :root{
+    --paper:#f4ecda;
+    --paper-2:#efe4cc;
+    --paper-3:#e9dcc0;
+    --ink:#2c251a;
+    --ink-soft:#5c5340;
+    --ink-faint:#8a7f68;
+    --line:#d9cbae;
+    --red:#9c2b1f;
+    --red-d:#7c1f15;
+    --green:#2f5d4f;
+    --green-d:#234741;
+    --gold:#a9802f;
+    --gold-d:#836024;
+    --blue:#3a5a78;
+    --blue-d:#2c465c;
+    --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+    --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:var(--serif);
+    color:var(--ink);
+    line-height:1.95;
+    background-color:var(--paper);
+    background-image:
+      radial-gradient(circle at 20% 15%, rgba(255,255,255,.45), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(160,130,80,.12), transparent 45%),
+      repeating-linear-gradient(0deg, rgba(140,110,70,.025) 0 2px, transparent 2px 4px);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:clamp(380px,62vh,600px);
+    display:flex;
+    align-items:flex-end;
+    padding:clamp(1.6rem,5vw,4rem);
+    color:#f6ecd6;
+    background-color:#241910;
+    background-image:
+      linear-gradient(to bottom, rgba(28,18,10,.20) 0%, rgba(28,18,10,.55) 55%, rgba(20,12,6,.92) 100%),
+      url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+    background-position:center;
+    background-size:cover;
+    background-attachment:fixed;
+  }
+  @media (max-width:640px){ .hero{background-attachment:scroll;} }
+
+  .hero-ribbon{
+    position:absolute;
+    top:0; right:clamp(1.2rem,5vw,3rem);
+    background:var(--red);
+    color:#fbeede;
+    font-family:var(--serif);
+    font-weight:600;
+    letter-spacing:.18em;
+    padding:.7rem 1.1rem;
+    writing-mode:vertical-rl;
+    text-orientation:upright;
+    box-shadow:0 6px 18px rgba(0,0,0,.35);
+  }
+  .hero-ribbon::after{
+    content:"";
+    position:absolute;
+    bottom:-14px; left:0;
+    border-width:14px 28px 0 0;
+    border-style:solid;
+    border-color:var(--red-d) transparent transparent transparent;
+  }
+  .hero-inner{max-width:760px;}
+  .hero-kicker{
+    font-family:var(--sans);
+    font-size:.78rem;
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    color:#e7c98f;
+    margin:0 0 .6rem;
+  }
+  .hero h1{
+    font-size:clamp(2.4rem,9vw,4.4rem);
+    font-weight:700;
+    margin:0;
+    letter-spacing:.04em;
+    text-shadow:0 2px 16px rgba(0,0,0,.55);
+  }
+  .hero-sub{
+    font-size:clamp(1rem,3.4vw,1.35rem);
+    font-weight:500;
+    margin:.5rem 0 0;
+    color:#f0e2c4;
+    letter-spacing:.06em;
+  }
+  .hero-desc{
+    margin:1.1rem 0 0;
+    font-size:clamp(.95rem,3vw,1.1rem);
+    color:#e9dcc2;
+    max-width:34em;
+    line-height:1.8;
+    text-shadow:0 1px 8px rgba(0,0,0,.5);
+  }
+
+  /* ---------- LAYOUT ---------- */
+  .wrap{
+    max-width:880px;
+    margin:0 auto;
+    padding:clamp(1.6rem,5vw,3rem) clamp(1.1rem,5vw,2rem) 4rem;
+  }
+
+  /* TOC bookmark chips */
+  .toc{
+    display:flex;
+    flex-wrap:wrap;
+    gap:.6rem;
+    margin:0 0 2.4rem;
+    padding:.2rem 0;
+  }
+  .toc a{
+    font-family:var(--sans);
+    font-size:.82rem;
+    color:var(--ink-soft);
+    text-decoration:none;
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:.34rem .8rem;
+    background:var(--paper-2);
+    transition:.18s;
+    position:relative;
+    top:0;
+  }
+  .toc a:hover{ top:-2px; border-color:var(--red); color:var(--red); }
+
+  /* Section card + ribbon header */
+  .section{ margin:0 0 3rem; }
+  .ribbon{
+    display:inline-block;
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(1.15rem,4vw,1.5rem);
+    color:#fdf3df;
+    padding:.5rem 1.4rem .55rem;
+    margin:0 0 1.3rem;
+    letter-spacing:.05em;
+    position:relative;
+    box-shadow:0 4px 12px rgba(0,0,0,.18);
+  }
+  .ribbon.red{ background:var(--red); }
+  .ribbon.green{ background:var(--green); }
+  .ribbon.gold{ background:var(--gold); }
+  .ribbon.blue{ background:var(--blue); }
+  .ribbon::after{
+    content:"";
+    position:absolute;
+    left:0; bottom:-11px;
+    border-width:11px 11px 0 0;
+    border-style:solid;
+    border-color:var(--red-d) transparent transparent transparent;
+  }
+  .ribbon.red::after{ border-color:var(--red-d) transparent transparent transparent; }
+  .ribbon.green::after{ border-color:var(--green-d) transparent transparent transparent; }
+  .ribbon.gold::after{ border-color:var(--gold-d) transparent transparent transparent; }
+  .ribbon.blue::after{ border-color:var(--blue-d) transparent transparent transparent; }
+
+  .card{
+    background:linear-gradient(180deg,var(--paper-2),var(--paper-3));
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:clamp(1.2rem,4vw,1.8rem);
+    box-shadow:0 2px 10px rgba(120,90,40,.10);
+  }
+
+  p{ margin:0 0 1rem; }
+  p:last-child{ margin-bottom:0; }
+  .lead{ font-size:1.06rem; color:var(--ink); }
+  .muted{ color:var(--ink-soft); }
+
+  /* Book info grid */
+  .meta{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:1rem 1.4rem;
+  }
+  .meta .item{ border-left:3px solid var(--gold); padding-left:.9rem; }
+  .meta .k{ font-family:var(--sans); font-size:.74rem; letter-spacing:.12em; color:var(--ink-faint); text-transform:uppercase; }
+  .meta .v{ font-size:1rem; font-weight:600; margin-top:.15rem; }
+  .meta .v small{ display:block; font-weight:400; font-size:.85rem; color:var(--ink-soft); margin-top:.15rem; }
+
+  /* Two-column comparison */
+  .compare{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1.2rem;
+  }
+  .compare .col{
+    border-top:5px solid;
+    padding-top:1rem;
+  }
+  .compare .col.old{ border-color:var(--ink-faint); }
+  .compare .col.new{ border-color:var(--green); }
+  .compare h4{ margin:.2rem 0 .8rem; font-size:1.08rem; }
+  .compare .old h4{ color:var(--ink-soft); }
+  .compare .new h4{ color:var(--green); }
+  .compare ul{ margin:0; padding-left:1.1rem; }
+  .compare li{ margin:0 0 .55rem; font-size:.96rem; }
+  .compare .tag{
+    display:inline-block; font-family:var(--sans); font-size:.72rem;
+    letter-spacing:.1em; padding:.12rem .55rem; border-radius:2px; margin-bottom:.4rem;
+  }
+  .compare .old .tag{ background:#e3d9c4; color:var(--ink-soft); }
+  .compare .new .tag{ background:#d7e6df; color:var(--green-d); }
+
+  .subnote{
+    margin-top:1.2rem; padding:1rem 1.1rem;
+    background:rgba(58,90,120,.08);
+    border-left:4px solid var(--blue);
+    border-radius:0 4px 4px 0;
+    font-size:.96rem;
+  }
+
+  /* Concept cards */
+  .concepts{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(244px,1fr));
+    gap:1.1rem;
+  }
+  .ccard{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:1.2rem 1.2rem 1.3rem;
+    position:relative;
+    overflow:hidden;
+  }
+  .ccard::before{
+    content:""; position:absolute; top:0; left:0; width:100%; height:5px;
+  }
+  .ccard.c1::before{ background:var(--red); }
+  .ccard.c2::before{ background:var(--green); }
+  .ccard.c3::before{ background:var(--gold); }
+  .ccard.c4::before{ background:var(--blue); }
+  .ccard.c5::before{ background:var(--red); }
+  .ccard.c6::before{ background:var(--green); }
+  .ccard h4{ margin:.6rem 0 .5rem; font-size:1.08rem; }
+  .ccard .en{ font-family:var(--sans); font-size:.74rem; letter-spacing:.08em; color:var(--ink-faint); text-transform:uppercase; }
+  .ccard p{ font-size:.93rem; color:var(--ink-soft); line-height:1.8; margin:0; }
+
+  /* Chapter map */
+  .map{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1rem;
+    position:relative;
+  }
+  .map .part{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:0 0 .9rem;
+    overflow:hidden;
+  }
+  .map .ph{
+    color:#fdf3df; font-weight:600; text-align:center;
+    padding:.55rem .4rem; font-size:.92rem; letter-spacing:.04em;
+  }
+  .map .part:nth-child(1) .ph{ background:var(--red); }
+  .map .part:nth-child(2) .ph{ background:var(--gold); }
+  .map .part:nth-child(3) .ph{ background:var(--green); }
+  .map .part:nth-child(4) .ph{ background:var(--blue); }
+  .map .ptitle{ font-size:.86rem; color:var(--ink-soft); text-align:center; padding:.5rem .4rem .6rem; line-height:1.5; }
+  .map ol{ margin:0; padding:.2rem 1rem .2rem 1.6rem; }
+  .map li{ font-size:.85rem; color:var(--ink); margin:.32rem 0; line-height:1.5; }
+
+  /* Quotes */
+  .quote{
+    border-left:6px solid var(--red);
+    background:linear-gradient(90deg,rgba(156,43,31,.06),transparent);
+    padding:1.1rem 1.3rem;
+    margin:0 0 1.2rem;
+    position:relative;
+  }
+  .quote:nth-child(2n){ border-left-color:var(--green); background:linear-gradient(90deg,rgba(47,93,79,.06),transparent); }
+  .quote:nth-child(3n){ border-left-color:var(--gold); background:linear-gradient(90deg,rgba(169,128,47,.07),transparent); }
+  .quote .q{ font-size:1.12rem; font-weight:500; line-height:1.85; }
+  .quote .en{ display:block; font-family:var(--sans); font-size:.82rem; color:var(--ink-faint); margin-top:.5rem; font-style:normal; }
+
+  /* Action list */
+  .actions{ counter-reset:act; list-style:none; margin:0; padding:0; }
+  .actions li{
+    position:relative;
+    padding:.2rem 0 .2rem 3rem;
+    margin:0 0 1rem;
+    font-size:.98rem;
+  }
+  .actions li::before{
+    counter-increment:act; content:counter(act);
+    position:absolute; left:0; top:.1rem;
+    width:2.1rem; height:2.1rem;
+    background:var(--blue); color:#fdf3df;
+    font-family:var(--serif); font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 3px 8px rgba(0,0,0,.18);
+  }
+  .actions b{ color:var(--blue-d); }
+  .actions .eg{ display:block; font-size:.86rem; color:var(--ink-soft); margin-top:.2rem; }
+
+  /* Tags */
+  .tags{ display:flex; flex-wrap:wrap; gap:.6rem; }
+  .tagpill{
+    font-family:var(--sans); font-size:.86rem;
+    background:var(--paper-2); border:1px solid var(--line);
+    border-radius:30px; padding:.4rem 1rem; color:var(--ink);
+  }
+  .tagpill.no{ background:#efe0db; border-color:#d8b3aa; color:var(--red-d); }
+
+  footer{
+    text-align:center;
+    color:var(--ink-faint);
+    font-family:var(--sans);
+    font-size:.8rem;
+    padding:2rem 1rem 3rem;
+    border-top:1px solid var(--line);
+    margin-top:2rem;
+  }
+
+  /* ---------- Scroll-triggered animations ---------- */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .animate-on-scroll.card-stagger { transition-delay: calc(var(--i, 0) * 0.07s); }
+  .animate-on-scroll.card-stagger.visible { transition-delay: calc(var(--i, 0) * 0.07s); }
+
+  /* Quote left ribbon slide */
+  .quote.animate-on-scroll {
+    border-left: 4px solid transparent;
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                border-left-color 0.5s 0.3s ease;
+  }
+
+  /* ---------- Back to Shelf ---------- */
+  .back-to-shelf {
+    position: fixed;
+    top: 1.2rem;
+    left: 1.2rem;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 0.45rem 1rem;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.15);
+    letter-spacing: 0.04em;
+    transition: background 0.2s, color 0.2s;
+  }
+  .back-to-shelf:hover {
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:760px){
+    .compare{ grid-template-columns:1fr; }
+    .map{ grid-template-columns:repeat(2,1fr); }
+  }
+  @media (max-width:480px){
+    .map{ grid-template-columns:1fr; }
+    .hero-ribbon{ font-size:.9rem; padding:.5rem .8rem; }
+    body{ line-height:1.85; }
+  }
+</style>
+</head>
+<body>
+
+<a href="../../" class="back-to-shelf">&larr; 返回书架</a>
+
+<header class="hero">
+  <div class="hero-ribbon">读书笔记</div>
+  <div class="hero-inner">
+    <p class="hero-kicker">技术哲学 &middot; 复杂系统 &middot; 演化理论</p>
+    <h1>技术的本质</h1>
+    <p class="hero-sub">The Nature of Technology &middot; 布莱恩&middot;阿瑟（W. Brian Arthur）</p>
+    <p class="hero-desc">技术不是科学的附庸，也不是孤立的天才发明；它是被捕获的自然现象的组合，在已有技术之上不断重组、自我繁殖、自我创造。</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <nav class="toc">
+    <a href="#info">书籍信息</a>
+    <a href="#overview">一句话总览</a>
+    <a href="#framework">核心框架</a>
+    <a href="#concepts">关键概念</a>
+    <a href="#map">章节脉络</a>
+    <a href="#quotes">金句</a>
+    <a href="#actions">行动启发</a>
+    <a href="#who">适合谁读</a>
+  </nav>
+
+  <!-- 书籍信息 -->
+  <section class="section" id="info">
+    <span class="ribbon red animate-on-scroll">书籍信息</span>
+    <div class="card animate-on-scroll">
+      <div class="meta">
+        <div class="item">
+          <div class="k">作者</div>
+          <div class="v">W. 布莱恩&middot;阿瑟<small>圣塔菲研究所元老、复杂性科学先驱，斯坦福经济学教授</small></div>
+        </div>
+        <div class="item">
+          <div class="k">领域</div>
+          <div class="v">技术哲学 / 复杂系统<small>经济学 &middot; 演化理论 &middot; 创新研究</small></div>
+        </div>
+        <div class="item">
+          <div class="k">出版</div>
+          <div class="v">浙江人民出版社<small>2014 中译本（曹东溟、王健 译）</small></div>
+        </div>
+        <div class="item">
+          <div class="k">核心命题</div>
+          <div class="v">技术是一种自创生的进化系统<small>经济是技术的表达，而非相反</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 一句话总览 -->
+  <section class="section" id="overview">
+    <span class="ribbon gold animate-on-scroll">一句话总览</span>
+    <div class="card animate-on-scroll">
+      <p class="lead">技术，是被<strong>捕获的自然现象</strong>的组合；它在已有技术之上不断重组，<strong>自创生地</strong>进化。理解技术如何组合与演化，就理解了现代经济是如何从技术结构中长出来的。</p>
+    </div>
+  </section>
+
+  <!-- 核心框架 -->
+  <section class="section" id="framework">
+    <span class="ribbon green animate-on-scroll">核心框架：两种技术观</span>
+    <div class="card animate-on-scroll">
+      <div class="compare">
+        <div class="col old">
+          <span class="tag">常识 / 传统范式</span>
+          <h4>技术是"应用科学"</h4>
+          <ul>
+            <li>先有科学发现，再有工程应用——技术是科学的下游产物。</li>
+            <li>技术是孤立的发明，由天才个人灵光一现创造。</li>
+            <li>进步是线性的、可被自上而下规划的。</li>
+            <li>技术是经济的"工具"，被动服务于经济。</li>
+          </ul>
+        </div>
+        <div class="col new">
+          <span class="tag">阿瑟的新范式</span>
+          <h4>技术是"现象的组合进化"</h4>
+          <ul>
+            <li>技术 = 被捕获的现象 + 人的目的；科学只是提供可捕获的新现象。</li>
+            <li>技术由技术组合而成（递归），新技术的零件本身也是技术。</li>
+            <li>进步是<strong>组合进化</strong>：新技术来自旧技术的重组，自创生。</li>
+            <li><strong>经济是技术的表达</strong>：技术结构决定经济结构。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="subnote">
+        <strong>延伸的双系统对照：</strong>生物进化靠"随机变异 + 自然选择"、无方向；技术进化靠"目的驱动的组合 + 经济/人类选择"、有方向。所以技术不是达尔文式的随机试错，而是带着目的、在已有元素上重组的进化——这正是阿瑟对"技术如何诞生"最反直觉也最核心的洞见。
+      </div>
+    </div>
+  </section>
+
+  <!-- 关键概念 -->
+  <section class="section" id="concepts">
+    <span class="ribbon blue animate-on-scroll">关键概念</span>
+    <div class="concepts">
+      <div class="ccard c1 animate-on-scroll card-stagger" style="--i:0">
+        <div class="en">Combinatorial Evolution</div>
+        <h4>组合进化</h4>
+        <p>所有技术都源自此前已有的技术，通过重新组合而诞生。新技术是旧技术的"孩子"，技术的总量因此指数式增长。</p>
+      </div>
+      <div class="ccard c2 animate-on-scroll card-stagger" style="--i:1">
+        <div class="en">Captured Phenomena</div>
+        <h4>捕获现象</h4>
+        <p>技术是把自然/物理效应（如电磁感应、量子隧穿）"harness"来实现目的。新现象的发现会开启一个全新的技术域。</p>
+      </div>
+      <div class="ccard c3 animate-on-scroll card-stagger" style="--i:2">
+        <div class="en">Domain & Takeover</div>
+        <h4>技术域与域的接管</h4>
+        <p>域是一族共享同一套基础效应与标准的技术（如机械、电子、数字）。当新域更便宜、更好、更灵活，便会逐步接管旧域。</p>
+      </div>
+      <div class="ccard c4 animate-on-scroll card-stagger" style="--i:3">
+        <div class="en">Recursiveness</div>
+        <h4>递归结构</h4>
+        <p>技术由技术组成，子技术本身也是完整技术。这种层级递归让技术既是部件、又是整体。</p>
+      </div>
+      <div class="ccard c5 animate-on-scroll card-stagger" style="--i:4">
+        <div class="en">Autopoiesis</div>
+        <h4>自创生</h4>
+        <p>新技术创造新需求，新需求又呼唤更新的技术——技术自己生出自己，不依赖科学也能持续进化。</p>
+      </div>
+      <div class="ccard c6 animate-on-scroll card-stagger" style="--i:5">
+        <div class="en">Economy = Expression</div>
+        <h4>经济是技术的表达</h4>
+        <p>可用的技术集合决定了经济结构；每一次重大技术革命，本质上都是一次经济结构的重构。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 章节脉络 -->
+  <section class="section" id="map">
+    <span class="ribbon red animate-on-scroll">全书章节脉络</span>
+    <div class="card animate-on-scroll">
+      <div class="map">
+        <div class="part">
+          <div class="ph">第一部分</div>
+          <div class="ptitle">问题的提出</div>
+          <ol>
+            <li>技术给我们的困惑</li>
+            <li>组合进化</li>
+            <li>现象</li>
+          </ol>
+        </div>
+        <div class="part">
+          <div class="ph">第二部分</div>
+          <div class="ptitle">技术体</div>
+          <ol>
+            <li>域</li>
+            <li>工程与组合</li>
+            <li>技术的递归性</li>
+            <li>技术星群</li>
+          </ol>
+        </div>
+        <div class="part">
+          <div class="ph">第三部分</div>
+          <div class="ptitle">技术体的进化</div>
+          <ol>
+            <li>域的生命周期</li>
+            <li>域的进化</li>
+            <li>创新的发生机制</li>
+          </ol>
+        </div>
+        <div class="part">
+          <div class="ph">第四部分</div>
+          <div class="ptitle">经济中的技术</div>
+          <ol>
+            <li>技术是什么</li>
+            <li>经济是技术的表达</li>
+            <li>这种表达带来的轮回</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 金句 -->
+  <section class="section" id="quotes">
+    <span class="ribbon gold animate-on-scroll">金句摘录</span>
+    <div class="card animate-on-scroll">
+      <blockquote class="quote animate-on-scroll">
+        <span class="q">"技术是实现人的目的的一种手段。"</span>
+        <span class="en">Technology is a means to fulfill a human purpose.</span>
+      </blockquote>
+      <blockquote class="quote animate-on-scroll">
+        <span class="q">"每一项技术，都是被捕获的现象的组合；而每一项新技术，都来自已有技术的组合。"</span>
+        <span class="en">Every technology is a combination of captured phenomena; every new technology arises from combinations of existing ones.</span>
+      </blockquote>
+      <blockquote class="quote animate-on-scroll">
+        <span class="q">"技术进化是组合进化——它不靠随机变异，而靠带着目的的元素重组。"</span>
+        <span class="en">Technological evolution is combinatorial evolution, purposeful and recursive.</span>
+      </blockquote>
+      <blockquote class="quote animate-on-scroll">
+        <span class="q">"经济不是技术的容器，经济是技术的表达。"</span>
+        <span class="en">The economy is not a container for technologies; the economy is the expression of its technologies.</span>
+      </blockquote>
+      <blockquote class="quote animate-on-scroll">
+        <span class="q">"技术体是自我繁殖的：它自己生出了自己，并由此重塑了整个经济世界。"</span>
+        <span class="en">The technium is self-reproducing: it births itself, and in doing so reshapes the economy.</span>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- 行动启发 -->
+  <section class="section" id="actions">
+    <span class="ribbon blue animate-on-scroll">对工作的行动启发</span>
+    <div class="card animate-on-scroll">
+      <ol class="actions">
+        <li>
+          <span><b>用"域的接管"看行业生死。</b>判断你的产品处在哪个技术域，新域是否正在逼近——不要等到被替代才反应。</span>
+          <span class="eg">例：数据中心交换机正经历"白盒/解耦 + 硅光 + Chiplet"等新域的渗透，需提前布局而非只做参数优化。</span>
+        </li>
+        <li>
+          <span><b>重视组合式创新，而非只追"从零发明"。</b>更多价值来自已有技术元素的新组合——功能拼接、生态组合、跨界重组。</span>
+          <span class="eg">例：把 telemetry、自动化运维、开放 API 组合成"智能网管"，往往比单点性能突破更有竞争力。</span>
+        </li>
+        <li>
+          <span><b>盯住底层"现象"与"新域"。</b>真正的颠覆来自新效应/新域，而不是同一域内的参数内卷。</span>
+          <span class="eg">例：硅光子、AI 推理下沉到交换芯片，是域级变化；带宽从 400G 到 800G 只是域内迭代。</span>
+        </li>
+        <li>
+          <span><b>决策时区分"工具思维"与"结构思维"。</b>技术结构演化会重构整个竞争格局，做规划要看技术树，不只看竞品参数表。</span>
+        </li>
+        <li>
+          <span><b>主动自我革命，用新域替代自己的旧域。</b>既然技术自创生，在位者必须自己动手替换，否则会被外部域接管。</span>
+          <span class="eg">例：Netflix 用流媒体替代自己的 DVD 业务；厂商应主动用软件定义替代传统封闭架构。</span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 适合谁读 -->
+  <section class="section" id="who">
+    <span class="ribbon green animate-on-scroll">适合谁读</span>
+    <div class="card animate-on-scroll">
+      <div class="tags">
+        <span class="tagpill">产品经理 / 技术创新负责人</span>
+        <span class="tagpill">战略与投资分析师</span>
+        <span class="tagpill">工程师与系统架构师</span>
+        <span class="tagpill">关注"技术如何塑造世界"的读者</span>
+        <span class="tagpill no">不适合：想找具体技术操作教程的人（本书是理论书，非手册）</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    读书笔记整理自《技术的本质》（The Nature of Technology）&middot; 布莱恩&middot;阿瑟 &middot; 浙江人民出版社<br>
+    本页为个人阅读笔记，引用文字以原书为准。
+  </footer>
+
+</main>
+
+<!-- Comment trigger -->
+<div class="comment-section">
+  <button class="comment-trigger js-open-discussion" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    留下评论
+  </button>
+  <p style="margin-top:8px;color:#9a8b7a;font-size:13px;">首次留言需使用 GitHub 账号登录</p>
+</div>
+
+<!-- ===== Giscus 评论弹窗 ===== -->
+<dialog class="discussion-panel" id="discussion-panel" aria-labelledby="discussion-title">
+  <div class="panel-shell">
+    <header class="panel-header">
+      <div>
+        <div class="panel-kicker">DISCUSSION</div>
+        <h2 id="discussion-title">读者评论</h2>
+      </div>
+      <button class="panel-close" id="discussion-close" type="button">关闭</button>
+    </header>
+    <div class="panel-content">
+      <div class="discussion-card">
+        <p class="discussion-intro">关于《技术的本质》，你有什么想法？欢迎留下评论。首次留言需要使用 GitHub 账号登录。</p>
+        <script src="https://giscus.app/client.js"
+                data-repo="Acidache/reading-notes-mindset"
+                data-repo-id="R_kgDOTvUWjg"
+                data-category="General"
+                data-category-id="DIC_kwDOTvUWjs4DCx06"
+                data-mapping="pathname"
+                data-strict="1"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="light"
+                data-lang="zh-CN"
+                crossorigin="anonymous"
+                async>
+        </script>
+        <noscript>
+          <p class="discussion-note">需要启用 JavaScript 才能显示评论区。你也可以直接前往
+            <a href="https://github.com/Acidache/reading-notes-mindset/discussions">GitHub Discussions</a>
+            参与讨论。
+          </p>
+        </noscript>
+        <p class="discussion-note">评论由 <a href="https://giscus.app/zh-CN" rel="noopener noreferrer">giscus</a> 与 GitHub Discussions 提供；登录和评论遵循 GitHub 的隐私政策与社区规则。</p>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script src="../../assets/comments.js"></script>
+<script>
+  // Scroll-triggered reveal animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
