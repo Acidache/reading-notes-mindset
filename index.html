@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>读书笔记</title>
 <style>
   /* ===== Reset & Base ===== */
@@ -36,6 +38,12 @@
     z-index: 2;
     padding: 3rem 2rem;
     animation: heroFadeIn 1s ease-out both;
+  }
+  .hero-logo {
+    display: block;
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 1rem;
   }
   @keyframes heroFadeIn {
     from { opacity: 0; transform: translateY(24px); }
@@ -449,6 +457,7 @@
   <!-- Hero -->
   <header class="hero">
     <div class="hero-content">
+      <img class="hero-logo" src="assets/goushoen-mark-dark.svg" width="52" height="52" alt="goushoen">
       <div class="hero-tag">READING NOTES</div>
       <h1>读书笔记</h1>
       <p class="hero-subtitle">阅读、思考、记录 &mdash; 把书读进生活里</p>
