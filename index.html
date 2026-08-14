@@ -39,11 +39,15 @@
     padding: 3rem 2rem;
     animation: heroFadeIn 1s ease-out both;
   }
-  .hero-logo {
+  .hero-brand {
     display: block;
-    width: 52px;
-    height: 52px;
-    margin: 0 auto 1rem;
+    position: absolute;
+    z-index: 3;
+    top: 30px;
+    left: 34px;
+    width: 148px;
+    height: auto;
+    opacity: 0.88;
   }
   @keyframes heroFadeIn {
     from { opacity: 0; transform: translateY(24px); }
@@ -429,6 +433,11 @@
   }
 
   @media (max-width: 480px) {
+    .hero-brand {
+      top: 20px;
+      left: 20px;
+      width: 118px;
+    }
     .bookshelf {
       gap: 1rem;
       padding: 1.5rem 0.6rem 1.2rem;
@@ -456,8 +465,8 @@
 
   <!-- Hero -->
   <header class="hero">
+    <img class="hero-brand" src="assets/goushoen-logo-on-dark.svg" width="148" height="31" alt="goushoen">
     <div class="hero-content">
-      <img class="hero-logo" src="assets/goushoen-mark-dark.svg" width="52" height="52" alt="goushoen">
       <div class="hero-tag">READING NOTES</div>
       <h1>读书笔记</h1>
       <p class="hero-subtitle">阅读、思考、记录 &mdash; 把书读进生活里</p>
